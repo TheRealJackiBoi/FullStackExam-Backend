@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
+    "strictNullChecks": true,
     "noImplicitAny": true,
     "rootDirs": ["src"],
     "outDir": "dist",
