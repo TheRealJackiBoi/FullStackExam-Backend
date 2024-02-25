@@ -3,11 +3,6 @@ import { IService } from "../types/types";
 
 
 const serviceSchema = new mongoose.Schema<IService>({
-  _id: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    message: "ObjectId is required"
-  },
   name: {
     type: String,
     required: true,
