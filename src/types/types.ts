@@ -2,6 +2,7 @@ import { ObjectId } from "mongodb"
 
 
 export interface IBooking {
+  _id: ObjectId,
   startTime: Date,
   endTime: Date,
   status: Status,

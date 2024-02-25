@@ -22,6 +22,11 @@ const caseSchema = new mongoose.Schema<ICase>({
 })
 
 const bookingSchema = new mongoose.Schema<IBooking>({
+  _id: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    message: "ObjectId is required"
+  },
   startTime: {
     type: Date,
     required: true,
