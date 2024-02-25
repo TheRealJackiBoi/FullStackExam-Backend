@@ -8,8 +8,9 @@ import { typeDefs } from './schema'
 import mongoose from 'mongoose';
 import "dotenv/config";
 import resolvers from './resolvers/resolvers';
-import { IBooking } from './types/types';
+import { IBooking, IService } from './types/types';
 import { Booking } from './models/booking';
+import Service from './models/service';
 
 const uri: string = process.env.MONGODB_URI!;
 
@@ -17,6 +18,7 @@ export interface IContext {
 
   dataSources: {
     Bookings: mongoose.Model<IBooking>
+    Services: mongoose.Model<IService>
   }
 
 }
@@ -52,7 +54,8 @@ expressMiddleware(server, {
 
     return {
       dataSources: {
-        Bookings: Booking
+        Bookings: Booking,
+        Services: Service
       }
     }
   }

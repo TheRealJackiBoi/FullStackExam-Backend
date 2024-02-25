@@ -21,3 +21,9 @@ export enum Status {
   CANCELLED = "CANCELLED",
   ONHOLD = "ONHOLD"
 }
+
+export interface IService {
+  _id: ObjectId,
+  name: string,
+  estimatedTime: number
+}

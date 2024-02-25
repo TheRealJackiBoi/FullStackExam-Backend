@@ -10,6 +10,14 @@ const typeDefs = `#graphql
     Returns a booking by id 
     """
     booking(_id: ID!): Booking
+    """
+    Returns all the services
+    """
+    services: [Service]
+    """
+    Returns a service by id
+    """
+    service(_id: ID!): Service
   }
 
   type Booking {
