@@ -1,3 +1,4 @@
+import { Address } from "cluster"
 import { ObjectId } from "mongodb"
 import { DateSchemaDefinition } from "mongoose"
 
@@ -37,4 +38,27 @@ export interface IService {
   _id: ObjectId,
   name: string,
   estimatedTime: number
+}
+
+export interface IUser {
+  _id: ObjectId,
+  firstname: string,
+  lastname: string,
+  role: Role,
+  cases: ICase[],
+  address: Address
+}
+
+export enum Role {
+  ADMIN = "admin",
+  USER = "user",
+  COMPANYOWNER = "companyowner",
+  COMPANYADMIN = "companyadmin"
+}
+
+export interface IAddress {
+  _id: ObjectId,
+  zipCode: number,
+  street: string,
+  houseNumber: number
 }
