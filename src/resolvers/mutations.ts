@@ -1,4 +1,4 @@
-import { IBookingInput, IUser } from '../types/types';
+import { IAddress, IBookingInput, IUser } from '../types/types';
 import { IContext } from '../server';
 
 
@@ -66,13 +66,66 @@ export const Mutation = {
 
   // CRUD FOR USER
   createUser: async (parent: never, { firstName, lastName, role, cases, address }: IUser, { dataSources }: IContext) => {
+    const { Users, Addresses } = dataSources;
+    
+    let res;
+    
+    //checks if the address is already in the database
+    const addressExists = await dataSources.Addresses.findById(address);
+
+    // if address is already there, use the exsisting address, else add it to the database
+    if(addressExists) {
+      res = await Users.create({ firstName, lastName, role, cases, address: addressExists._id });
+    } else { 
+      res = await Users.create({ firstName, lastName, role, cases, address });
+    }
+
+    return res;
+  },
+
+  updateUser: async (parent: never, { _id, firstName, lastName, role, cases, address }: IUser, { dataSources }: IContext) => {
+    const { Users, Addresses } = dataSources;
+
+    let res;
+
+    //checks if the address is already in the database
+    const addressExists = await Addresses.findById(address);
+
+    // if address is already there, use the exsisting address, else add it to the database
+    if(addressExists) {
+      res = await Users.findByIdAndUpdate(_id, 
+        // the updating fields  
+        { firstName, lastName, role, cases, address: addressExists._id },
+        // returns the updated document
+        { new: true });
+    } else { 
+      res = await Users.findByIdAndUpdate(_id,
+        // the updating fields
+        { firstName, lastName, role, cases, address },
+        // returns the updated document
+        { new: true });
+    }
+
+    return res;
+  },
+
+  deleteUser: async (parent: never, { _id }: IUser, { dataSources }: IContext) => {
     const { Users } = dataSources;
 
-    const res = await Users.create({ firstName, lastName, role, cases, address });
+    const res = await Users.findByIdAndDelete(_id);
 
-    //TODO check address is already in databas
-    //TODO: RETURN USER
+    return res;
   },
-  // TODO: RUD FOR USER
+
+  // CRUD FOR ADDRESS
+  createAddress: async (parent: never, { zipCode, street, houseNumber }: IAddress, { dataSources }: IContext) => {
+    const { Addresses } = dataSources;
+
+    const res = await Addresses.create({ zipCode, street, houseNumber });
+
+    return res;
+  },  
   // TODO: CRUD FOR ADDRESS
+
+
 }
