@@ -1,4 +1,3 @@
-import { Address } from "cluster"
 import { ObjectId } from "mongodb"
 import { DateSchemaDefinition } from "mongoose"
 
@@ -46,14 +45,14 @@ export interface IUser {
   lastname: string,
   role: Role,
   cases: ICase[],
-  address: Address
+  address: IAddress
 }
 
 export enum Role {
-  ADMIN = "admin",
-  USER = "user",
-  COMPANYOWNER = "companyowner",
-  COMPANYADMIN = "companyadmin"
+  ADMIN = "ADMIN",
+  USER = "USER",
+  COMPANYOWNER = "COMPANYOWNER",
+  COMPANYADMIN = "COMPANYADMIN",
 }
 
 export interface IAddress {
