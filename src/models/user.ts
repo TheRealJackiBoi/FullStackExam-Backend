@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 import { IUser, Role } from "../types/types";
 
 const userSchema = new mongoose.Schema<IUser>({
-    firstname: {
+    firstName: {
         type: String,
         required: true,
         message: "Firstname is required"
     },
-    lastname: {
+    lastName: {
         type: String,
         required: true,
         message: "Lastname is required"
@@ -34,4 +34,4 @@ const userSchema = new mongoose.Schema<IUser>({
 
 const User = mongoose.model<IUser>("User", userSchema)
 
-export { User }
+export default User

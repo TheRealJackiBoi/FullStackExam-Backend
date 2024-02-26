@@ -41,8 +41,8 @@ export interface IService {
 
 export interface IUser {
   _id: ObjectId,
-  firstname: string,
-  lastname: string,
+  firstName: string,
+  lastName: string,
   role: Role,
   cases: ICase[],
   address: IAddress
