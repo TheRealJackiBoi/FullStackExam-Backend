@@ -22,12 +22,20 @@ const typeDefs = `#graphql
     """
     Returns all the users
     """
-    users: [USER]
+    users: [User]
     """
     Returns a user by id
     """
-    user(_id: ID!): USER
-    //TODO: Add queries for Address
+    user(_id: ID!): User
+    
+    """
+    Returns all the addresses
+    """
+    addresses: [Address]
+    """
+    Returns an address by id
+    """
+    address(_id: ID!): Address
   }
 
   type Mutation {
@@ -57,6 +65,34 @@ const typeDefs = `#graphql
     Deletes a service by id
     """
     deleteService(_id: ID!): Service
+
+
+    """
+    Creates a new user
+    """
+    createUser(firstName: String!, lastName: String!, role: Role!, zipCode: Int!, street: String!, houseNumber: Int!): User
+    """
+    TODO: RUD operations for user
+    """
+    updateUser(_id: ID!, firstName: String, lastName: String, role: Role, zipCode: Int, street: String, houseNumber: Int): User
+    """
+    Deletes a user by id
+    """
+    deleteUser(_id: ID!): User
+
+
+    """
+    Creates a new address
+    """
+    createAddress(zipCode: Int!, street: String!, houseNumber: Int!): Address
+    """
+    Updates an address by id
+    """
+    updateAddress(_id: ID!, zipCode: Int, street: String, houseNumber: Int): Address
+    """
+    Deletes an address by id
+    """
+    deleteAddress(_id: ID!): Address
   }
 
   type Booking {

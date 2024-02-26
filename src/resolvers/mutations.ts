@@ -71,7 +71,7 @@ export const Mutation = {
     let res;
     
     //checks if the address is already in the database
-    const addressExists = await dataSources.Addresses.findById(address);
+    const addressExists = await Addresses.findById(address);
 
     // if address is already there, use the exsisting address, else add it to the database
     if(addressExists) {
@@ -102,7 +102,7 @@ export const Mutation = {
       res = await Users.findByIdAndUpdate(_id,
         // the updating fields
         { firstName, lastName, role, cases, address },
-        // returns the updated document
+        // returns the updated document, IF WE WANT VALIDATORS RUN WE NEED TO SET {runValidators: true}
         { new: true });
     }
 
@@ -117,6 +117,7 @@ export const Mutation = {
     return res;
   },
 
+
   // CRUD FOR ADDRESS
   createAddress: async (parent: never, { zipCode, street, houseNumber }: IAddress, { dataSources }: IContext) => {
     const { Addresses } = dataSources;
@@ -125,7 +126,21 @@ export const Mutation = {
 
     return res;
   },  
-  // TODO: CRUD FOR ADDRESS
 
+  updateAddress: async (parent: never, { _id, zipCode, street, houseNumber }: IAddress, { dataSources }: IContext) => {
+    const { Addresses } = dataSources;
 
+    const res = await Addresses.findByIdAndUpdate(_id, { zipCode, street, houseNumber }, { new: true });
+
+    return res;
+  },
+
+  deleteAddress: async (parent: never, { _id }: IAddress, { dataSources }: IContext) => {
+    const { Addresses } = dataSources;
+
+    const res = await Addresses.findByIdAndDelete(_id);
+
+    return res;
+  }
+  
 }
