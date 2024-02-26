@@ -18,6 +18,16 @@ const typeDefs = `#graphql
     Returns a service by id
     """
     service(_id: ID!): Service
+
+    """
+    Returns all the users
+    """
+    users: [USER]
+    """
+    Returns a user by id
+    """
+    user(_id: ID!): USER
+    //TODO: Add queries for Address
   }
 
   type Mutation {
@@ -74,6 +84,29 @@ const typeDefs = `#graphql
     _id: ID!
     name: String!
     estimatedTime: Int!
+  }
+
+  type User {
+    _id: ID!
+    firstName: String!
+    lastName: String!
+    role: Role!
+    cases: [Case]!
+    address: Address!
+  }
+
+  enum Role {
+    ADMIN,
+    USER,
+    COMPANYOWNER,
+    COMPANYADMIN
+  }
+
+  type Address {
+    _id: ID!
+    zipCode: Int!
+    street: String!
+    houseNumber: Int!
   }
 `
 

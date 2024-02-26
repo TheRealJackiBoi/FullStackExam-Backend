@@ -1,4 +1,4 @@
-import { IBookingInput } from '../types/types';
+import { IBookingInput, IUser } from '../types/types';
 import { IContext } from '../server';
 
 
@@ -62,5 +62,17 @@ export const Mutation = {
     const res = await Services.findByIdAndDelete(_id);
 
     return res;
-  }
+  },
+
+  // CRUD FOR USER
+  createUser: async (parent: never, { firstName, lastName, role, cases, address }: IUser, { dataSources }: IContext) => {
+    const { Users } = dataSources;
+
+    const res = await Users.create({ firstName, lastName, role, cases, address });
+
+    //TODO check address is already in databas
+    //TODO: RETURN USER
+  },
+  // TODO: RUD FOR USER
+  // TODO: CRUD FOR ADDRESS
 }

@@ -19,6 +19,8 @@ export interface IContext {
   dataSources: {
     Bookings: mongoose.Model<IBooking>
     Services: mongoose.Model<IService>
+    Users: mongoose.Model<IUser>
+    Addresses: mongoose.Model<IAddress>
   }
 
 }
@@ -55,7 +57,9 @@ expressMiddleware(server, {
     return {
       dataSources: {
         Bookings: Booking,
-        Services: Service
+        Services: Service,
+        Users: User,
+        Addresses: Address
       }
     }
   }
