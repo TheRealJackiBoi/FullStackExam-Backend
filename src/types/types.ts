@@ -40,12 +40,25 @@ export interface IService {
 }
 
 export interface IUser {
-  _id: ObjectId,
+  _id?: ObjectId,
   firstName: string,
   lastName: string,
   role: Role,
   cases: ICase[],
   address: IAddress
+}
+
+export interface IUserInput {
+  _id?: ObjectId,
+  firstName: string,
+  lastName: string,
+  role: Role,
+  cases: ICase[],
+  address: {
+    zipCode: number,
+    street: string,
+    houseNumber: number
+  }
 }
 
 export enum Role {
@@ -56,7 +69,7 @@ export enum Role {
 }
 
 export interface IAddress {
-  _id: ObjectId,
+  _id?: ObjectId,
   zipCode: number,
   street: string,
   houseNumber: number

@@ -1,4 +1,4 @@
-import { IAddress, IBookingInput, IUser } from '../types/types';
+import { IAddress, IBookingInput, IUser, IUserInput } from '../types/types';
 import { IContext } from '../server';
 
 
@@ -65,19 +65,24 @@ export const Mutation = {
   },
 
   // CRUD FOR USER
-  createUser: async (parent: never, { firstName, lastName, role, cases, address }: IUser, { dataSources }: IContext) => {
+
+  // change address to address fields
+  createUser: async (parent: never, { firstName, lastName, role, cases, address:{zipCode, street, houseNumber} }: IUserInput, { dataSources }: IContext) => {
     const { Users, Addresses } = dataSources;
     
     let res;
     
     //checks if the address is already in the database
+
+    //CHECK BY ZIPCODE, STREET AND HOUSENUMBER NOT BY ID FUN FUN FUN
     const addressExists = await Addresses.findById(address);
 
     // if address is already there, use the exsisting address, else add it to the database
     if(addressExists) {
       res = await Users.create({ firstName, lastName, role, cases, address: addressExists._id });
     } else { 
-      res = await Users.create({ firstName, lastName, role, cases, address });
+      const _address = await Addresses.create({ zipCode: zipCode, street: street, houseNumber: houseNumber });
+      res = await Users.create({ firstName, lastName, role, cases, address: _address._id });
     }
 
     return res;

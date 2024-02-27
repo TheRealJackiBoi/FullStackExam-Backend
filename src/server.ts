@@ -54,7 +54,7 @@ app.use('/graphql', cors<cors.CorsRequest>(),
 express.json(),
 expressMiddleware(server, {
   context: async () => {
-    await mongoose.connect(uri) 
+    await mongoose.connect(uri)
 
     return {
       dataSources: {
