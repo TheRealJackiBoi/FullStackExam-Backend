@@ -18,6 +18,24 @@ const typeDefs = `#graphql
     Returns a service by id
     """
     service(_id: ID!): Service
+
+    """
+    Returns all the users
+    """
+    users: [User]
+    """
+    Returns a user by id
+    """
+    user(_id: ID!): User
+    
+    """
+    Returns all the addresses
+    """
+    addresses: [Address]
+    """
+    Returns an address by id
+    """
+    address(_id: ID!): Address
   }
 
   type Mutation {
@@ -47,6 +65,34 @@ const typeDefs = `#graphql
     Deletes a service by id
     """
     deleteService(_id: ID!): Service
+
+
+    """
+    Creates a new user
+    """
+    createUser(firstName: String!, lastName: String!, role: Role!, zipCode: Int!, street: String!, houseNumber: Int!): User
+    """
+    TODO: RUD operations for user
+    """
+    updateUser(_id: ID!, firstName: String, lastName: String, role: Role, zipCode: Int, street: String, houseNumber: Int): User
+    """
+    Deletes a user by id
+    """
+    deleteUser(_id: ID!): User
+
+
+    """
+    Creates a new address
+    """
+    createAddress(zipCode: Int!, street: String!, houseNumber: Int!): Address
+    """
+    Updates an address by id
+    """
+    updateAddress(_id: ID!, zipCode: Int, street: String, houseNumber: Int): Address
+    """
+    Deletes an address by id
+    """
+    deleteAddress(_id: ID!): Address
   }
 
   type Booking {
@@ -74,6 +120,29 @@ const typeDefs = `#graphql
     _id: ID!
     name: String!
     estimatedTime: Int!
+  }
+
+  type User {
+    _id: ID!
+    firstName: String!
+    lastName: String!
+    role: Role!
+    cases: [Case]!
+    address: Address!
+  }
+
+  enum Role {
+    ADMIN,
+    USER,
+    COMPANYOWNER,
+    COMPANYADMIN
+  }
+
+  type Address {
+    _id: ID!
+    zipCode: Int!
+    street: String!
+    houseNumber: Int!
   }
 `
 

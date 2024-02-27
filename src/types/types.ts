@@ -38,3 +38,39 @@ export interface IService {
   name: string,
   estimatedTime: number
 }
+
+export interface IUser {
+  _id?: ObjectId,
+  firstName: string,
+  lastName: string,
+  role: Role,
+  cases: ICase[],
+  address: IAddress
+}
+
+export interface IUserInput {
+  _id?: ObjectId,
+  firstName: string,
+  lastName: string,
+  role: Role,
+  cases: ICase[],
+  
+    zipCode: number,
+    street: string,
+    houseNumber: number
+  
+}
+
+export enum Role {
+  ADMIN = "ADMIN",
+  USER = "USER",
+  COMPANYOWNER = "COMPANYOWNER",
+  COMPANYADMIN = "COMPANYADMIN",
+}
+
+export interface IAddress {
+  _id?: ObjectId,
+  zipCode: number,
+  street: string,
+  houseNumber: number
+}
