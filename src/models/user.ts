@@ -32,6 +32,16 @@ const userSchema = new mongoose.Schema<IUser>({
     }
 })
 
+userSchema.pre(/^find/, function (next) {
+    (this as any).populate({
+        path: "cases",
+        select: "-__v"
+    }).populate({
+        path: "address",
+        select: "-__v"
+    })
+    next()
+})
 
 const User = mongoose.model<IUser>("User", userSchema)
 
