@@ -54,11 +54,11 @@ export interface IUserInput {
   lastName: string,
   role: Role,
   cases: ICase[],
-  address: {
+  
     zipCode: number,
     street: string,
     houseNumber: number
-  }
+  
 }
 
 export enum Role {
