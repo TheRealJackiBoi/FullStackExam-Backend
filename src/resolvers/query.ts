@@ -1,6 +1,6 @@
 import { GraphQLError } from "graphql"
 import { IContext } from "../server"
-import { IBooking } from "../types/types"
+import { IBooking, IUser } from "../types/types"
 
 export const Query = {
 
@@ -52,5 +52,54 @@ export const Query = {
     }
 
     return res
+  },
+
+  users: async (parent: never, args: never, { dataSources }: IContext) => {
+    const { Users } = dataSources
+
+    const res = await Users.find()
+
+    if (!res) {
+      throw new GraphQLError("No users found")
+    }
+
+    return res;
+  },
+
+  user: async (parent: never, { _id }: IBooking, { dataSources }: IContext) => {
+    const { Users } = dataSources
+
+    const res = await Users.findById(_id)
+
+    if (!res) {
+      throw new GraphQLError("No user found with id: " + _id)
+    }
+
+    return res;
+  },
+
+  addresses: async (parent: never, args: never, { dataSources }: IContext) => {
+    const { Addresses } = dataSources
+
+    const res = await Addresses.find()
+
+    if (!res) {
+      throw new GraphQLError("No addresses found")
+    }
+
+    return res;
+  },
+
+  address: async (parent: never, { _id }: IBooking, { dataSources }: IContext) => {
+    const { Addresses } = dataSources
+
+    const res = await Addresses.findById(_id)
+
+    if (!res) {
+      throw new GraphQLError("No address found with id: " + _id)
+    }
+
+    return res;
   }
+  
 }

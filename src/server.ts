@@ -8,9 +8,11 @@ import { typeDefs } from './schema'
 import mongoose from 'mongoose';
 import "dotenv/config";
 import resolvers from './resolvers/resolvers';
-import { IBooking, IService } from './types/types';
+import { IAddress, IBooking, IService, IUser } from './types/types';
 import { Booking } from './models/booking';
 import Service from './models/service';
+import User from './models/user';
+import Address from './models/address';
 
 const uri: string = process.env.MONGODB_URI!;
 
@@ -19,6 +21,8 @@ export interface IContext {
   dataSources: {
     Bookings: mongoose.Model<IBooking>
     Services: mongoose.Model<IService>
+    Users: mongoose.Model<IUser>
+    Addresses: mongoose.Model<IAddress>
   }
 
 }
@@ -50,12 +54,14 @@ app.use('/graphql', cors<cors.CorsRequest>(),
 express.json(),
 expressMiddleware(server, {
   context: async () => {
-    await mongoose.connect(uri) 
+    await mongoose.connect(uri)
 
     return {
       dataSources: {
         Bookings: Booking,
-        Services: Service
+        Services: Service,
+        Users: User,
+        Addresses: Address
       }
     }
   }
