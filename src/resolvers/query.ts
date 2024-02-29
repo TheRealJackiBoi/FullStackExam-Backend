@@ -1,6 +1,6 @@
 import { GraphQLError } from "graphql"
 import { IContext } from "../server"
-import { IBooking, IUser } from "../types/types"
+import { IAddress, IBooking, IUser } from "../types/types"
 
 export const Query = {
 
@@ -66,7 +66,7 @@ export const Query = {
     return res;
   },
 
-  user: async (parent: never, { _id }: IBooking, { dataSources }: IContext) => {
+  user: async (parent: never, { _id }: IUser, { dataSources }: IContext) => {
     const { Users } = dataSources
 
     const res = await Users.findById(_id)
@@ -90,7 +90,7 @@ export const Query = {
     return res;
   },
 
-  address: async (parent: never, { _id }: IBooking, { dataSources }: IContext) => {
+  address: async (parent: never, { _id }: IAddress, { dataSources }: IContext) => {
     const { Addresses } = dataSources
 
     const res = await Addresses.findById(_id)
