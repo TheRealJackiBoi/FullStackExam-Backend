@@ -4,14 +4,27 @@ import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import http from 'http';
 import cors from 'cors';
-import { typeDefs } from './schema.js'
+import { typeDefs } from './schema'
 import mongoose from 'mongoose';
 import "dotenv/config";
+import resolvers from './resolvers/resolvers';
+import { IAddress, IBooking, IService, IUser } from './types/types';
+import { Booking } from './models/booking';
+import Service from './models/service';
+import User from './models/user';
+import Address from './models/address';
 
 const uri: string = process.env.MONGODB_URI!;
 
 export interface IContext {
-  token?: string
+
+  dataSources: {
+    Bookings: mongoose.Model<IBooking>
+    Services: mongoose.Model<IService>
+    Users: mongoose.Model<IUser>
+    Addresses: mongoose.Model<IAddress>
+  }
+
 }
 
 const app = express()
@@ -20,11 +33,7 @@ const httpServer = http.createServer(app)
 
 const server = new ApolloServer<IContext>({
   typeDefs,
-  resolvers: {
-    Query: {
-      hello: () => 'Hello, world!'
-    }
-  },
+  resolvers,
   plugins: [
     ApolloServerPluginDrainHttpServer({ httpServer })
   ]
@@ -45,8 +54,15 @@ app.use('/graphql', cors<cors.CorsRequest>(),
 express.json(),
 expressMiddleware(server, {
   context: async () => {
+    await mongoose.connect(uri)
+
     return {
-      token: '123'
+      dataSources: {
+        Bookings: Booking,
+        Services: Service,
+        Users: User,
+        Addresses: Address
+      }
     }
   }
 }))

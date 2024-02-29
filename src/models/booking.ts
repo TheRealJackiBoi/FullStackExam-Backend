@@ -41,6 +41,13 @@ const bookingSchema = new mongoose.Schema<IBooking>({
   case: caseSchema
 })
 
+bookingSchema.pre(/^find/, async function (next) {
+  (this as any).populate({
+    path: "case.service",
+    select: "name estimatedTime"
+  })
+  next()
+})
 
 const Case = mongoose.model<ICase>("Case", caseSchema)
 const Booking = mongoose.model<IBooking>("Booking", bookingSchema)
