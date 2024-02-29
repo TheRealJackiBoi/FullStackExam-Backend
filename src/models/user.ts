@@ -43,6 +43,13 @@ userSchema.pre(/^find/, function (next) {
     next()
 })
 
+userSchema.pre('save', function(){
+    (this as any).populate({
+        path: "address",
+        select: "-__v"
+    })
+})
+
 const User = mongoose.model<IUser>("User", userSchema)
 
 export default User
