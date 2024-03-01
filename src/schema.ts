@@ -70,7 +70,7 @@ const typeDefs = `#graphql
     """
     Creates a new user
     """
-    createUser(firstName: String!, lastName: String!, role: Role!, zipCode: Int!, street: String!, houseNumber: Int!): User
+    createUser(firstName: String!, lastName: String!, email: String!, password: String!, role: Role!, zipCode: Int!, street: String!, houseNumber: Int!): User
     """
     TODO: RUD operations for user
     """
@@ -126,6 +126,8 @@ const typeDefs = `#graphql
     _id: ID!
     firstName: String!
     lastName: String!
+    email: String!
+    password: String!
     role: Role!
     cases: [Case]!
     address: Address!
@@ -144,6 +146,6 @@ const typeDefs = `#graphql
     street: String!
     houseNumber: Int!
   }
-`
+`;
 
-export { typeDefs }
+export { typeDefs };

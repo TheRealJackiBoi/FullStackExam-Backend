@@ -1,10 +1,17 @@
-import { createBooking, deleteBooking, updateBooking } from './bookingResolvers';
-import { createService, deleteService, updateService } from './serviceResolvers';
-import { createUser, deleteUser, updateUser } from './userResolvers';
-import { createAddress, deleteAddress, updateAddress } from './addressResolver';
+import {
+  createBooking,
+  deleteBooking,
+  updateBooking,
+} from "./bookingResolvers";
+import {
+  createService,
+  deleteService,
+  updateService,
+} from "./serviceResolvers";
+import { createUser, deleteUser, updateUser } from "./userResolvers";
+import { createAddress, deleteAddress, updateAddress } from "./addressResolver";
 
 export const Mutation = {
-  
   // CRUD FOR BOOKING
   createBooking: createBooking,
 
@@ -26,11 +33,10 @@ export const Mutation = {
 
   deleteUser: deleteUser,
 
-
   // CRUD FOR ADDRESS
-  createAddress: createAddress,  
+  createAddress: createAddress,
 
   updateAddress: updateAddress,
 
   deleteAddress: deleteAddress,
-}
+};
