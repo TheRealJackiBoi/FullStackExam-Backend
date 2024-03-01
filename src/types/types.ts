@@ -1,5 +1,4 @@
 import { ObjectId } from "mongodb";
-import { DateSchemaDefinition } from "mongoose";
 
 export interface IBooking {
   _id: ObjectId;

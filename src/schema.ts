@@ -27,6 +27,10 @@ const typeDefs = `#graphql
     Returns a user by id
     """
     user(_id: ID!): User
+    """
+    Returns user if email and password are correct
+    """
+    login(email: String!, password: String!): User
     
     """
     Returns all the addresses
