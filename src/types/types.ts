@@ -1,64 +1,64 @@
-import { ObjectId } from "mongodb"
-import { DateSchemaDefinition } from "mongoose"
-
+import { ObjectId } from "mongodb";
 
 export interface IBooking {
-  _id: ObjectId,
-  startTime: Date,
-  endTime: Date,
-  status: Status,
-  case: ICase
+  _id: ObjectId;
+  startTime: Date;
+  endTime: Date;
+  status: Status;
+  case: ICase;
 }
 
 export interface IBookingInput {
-  _id?: ObjectId,
-  startTime: Date,
-  endTime: Date,
-  status: Status,
-  device: String,
-  cost: number,
-  serviceId: ObjectId
+  _id?: ObjectId;
+  startTime: Date;
+  endTime: Date;
+  status: Status;
+  device: String;
+  cost: number;
+  serviceId: ObjectId;
 }
 
 export interface ICase {
-  device: string,
-  cost: number,
-  service: ObjectId,
+  device: string;
+  cost: number;
+  service: ObjectId;
 }
 
 export enum Status {
   ONGOING = "ONGOING",
   COMPLETED = "COMPLETED",
   CANCELLED = "CANCELLED",
-  ONHOLD = "ONHOLD"
+  ONHOLD = "ONHOLD",
 }
 
 export interface IService {
-  _id: ObjectId,
-  name: string,
-  estimatedTime: number
+  _id: ObjectId;
+  name: string;
+  estimatedTime: number;
 }
 
 export interface IUser {
-  _id?: ObjectId,
-  firstName: string,
-  lastName: string,
-  role: Role,
-  cases: ICase[],
-  address: IAddress
+  _id?: ObjectId;
+  firstName: string;
+  lastName: string;
+  role: Role;
+  cases: ICase[];
+  address: IAddress;
+  email: string;
+  password: string;
 }
 
 export interface IUserInput {
-  _id?: ObjectId,
-  firstName: string,
-  lastName: string,
-  role: Role,
-  cases: ICase[],
-  
-    zipCode: number,
-    street: string,
-    houseNumber: number
-  
+  _id?: ObjectId;
+  firstName: string;
+  lastName: string;
+  role: Role;
+  cases: ICase[];
+  email: string;
+  password: string;
+  zipCode: number;
+  street: string;
+  houseNumber: number;
 }
 
 export enum Role {
@@ -69,8 +69,8 @@ export enum Role {
 }
 
 export interface IAddress {
-  _id?: ObjectId,
-  zipCode: number,
-  street: string,
-  houseNumber: number
+  _id?: ObjectId;
+  zipCode: number;
+  street: string;
+  houseNumber: number;
 }

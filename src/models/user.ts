@@ -1,55 +1,75 @@
 import mongoose from "mongoose";
 import { IUser, Role } from "../types/types";
 
-const userSchema = new mongoose.Schema<IUser>({
+const userSchema = new mongoose.Schema<IUser>(
+  {
+    email: {
+      type: String,
+      required: true,
+      message: "Email is required",
+    },
+    password: {
+      type: String,
+      required: true,
+      message: "Password is required",
+    },
     firstName: {
-        type: String,
-        required: true,
-        message: "Firstname is required"
+      type: String,
+      required: true,
+      message: "Firstname is required",
     },
     lastName: {
-        type: String,
-        required: true,
-        message: "Lastname is required"
+      type: String,
+      required: true,
+      message: "Lastname is required",
     },
     role: {
-        type: String,
-        required: true,
-        enum: Role,
-        message: "Role is required of following values: ADMIN, USER, COMPANYOWNER, COMPANYADMIN"
+      type: String,
+      required: true,
+      enum: Role,
+      message:
+        "Role is required of following values: ADMIN, USER, COMPANYOWNER, COMPANYADMIN",
     },
-    cases: [{
+    cases: [
+      {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Case",
         required: true,
-        message: "ObjectId of a case is required"
-    }],
+        message: "ObjectId of a case is required",
+      },
+    ],
     address: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Address",
-        required: true,
-        message: "ObjectId of an address is required"
-    }
-})
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Address",
+      required: true,
+      message: "ObjectId of an address is required",
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 userSchema.pre(/^find/, function (next) {
-    (this as any).populate({
-        path: "cases",
-        select: "-__v"
-    }).populate({
-        path: "address",
-        select: "-__v"
+  (this as any)
+    .populate({
+      path: "cases",
+      select: "-__v",
     })
-    next()
-})
+    .populate({
+      path: "address",
+      select: "-__v",
+    });
+  next();
+});
 
-userSchema.pre('save', function(){
-    (this as any).populate({
-        path: "address",
-        select: "-__v"
-    })
-})
+userSchema.pre("save", function () {
+  (this as any).populate({
+    path: "address",
+    select: "-__v",
+  });
+});
 
-const User = mongoose.model<IUser>("User", userSchema)
+const User = mongoose.model<IUser>("User", userSchema);
 
-export default User
+export default User;

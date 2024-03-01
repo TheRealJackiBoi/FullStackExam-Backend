@@ -27,6 +27,10 @@ const typeDefs = `#graphql
     Returns a user by id
     """
     user(_id: ID!): User
+    """
+    Returns user if email and password are correct
+    """
+    login(email: String!, password: String!): User
     
     """
     Returns all the addresses
@@ -70,7 +74,7 @@ const typeDefs = `#graphql
     """
     Creates a new user
     """
-    createUser(firstName: String!, lastName: String!, role: Role!, zipCode: Int!, street: String!, houseNumber: Int!): User
+    createUser(firstName: String!, lastName: String!, email: String!, password: String!, role: Role!, zipCode: Int!, street: String!, houseNumber: Int!): User
     """
     TODO: RUD operations for user
     """
@@ -126,6 +130,8 @@ const typeDefs = `#graphql
     _id: ID!
     firstName: String!
     lastName: String!
+    email: String!
+    password: String!
     role: Role!
     cases: [Case]!
     address: Address!
@@ -144,6 +150,6 @@ const typeDefs = `#graphql
     street: String!
     houseNumber: Int!
   }
-`
+`;
 
-export { typeDefs }
+export { typeDefs };
