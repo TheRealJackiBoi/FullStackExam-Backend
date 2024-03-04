@@ -192,7 +192,7 @@ const typeDefs = `#graphql
     _id: ID!
     name: String!
     services: [Service]!
-    Address: Address!
+    address: Address!
     description: String!
     openForBooking: Boolean!
     bustle: Bustle

@@ -53,6 +53,9 @@ const companySchema = new mongoose.Schema<ICompany>({
 
 
 companySchema.pre(/^find/, function (next) {
+  if ((this as any).options._recursed) {
+    return next();
+  }
   (this as any)
     .populate({
       path: "address",
@@ -65,15 +68,20 @@ companySchema.pre(/^find/, function (next) {
     .populate({
       path: "admins",
       select: "-__v",
+      options: { _recursed: true },
     })
     .populate({
       path: "owner",
       select: "-__v",
+      options: { _recursed: true },
     });
   next();
 });
 
-companySchema.pre("save", function () {
+companySchema.pre("save", function (next) {
+  if ((this as any).options._recursed) {
+    return next();
+  }
   (this as any).populate({
     path: "address",
     select: "-__v",
@@ -81,6 +89,7 @@ companySchema.pre("save", function () {
   .populate({
     path: "owner",
     select: "-__v",
+    options: { _recursed: true },
   })
   .populate({
     path: "services",
@@ -89,6 +98,7 @@ companySchema.pre("save", function () {
   .populate({
     path: "admins",
     select: "-__v",
+    options: { _recursed: true },
   });
 });
 
