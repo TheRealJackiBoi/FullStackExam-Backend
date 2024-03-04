@@ -123,7 +123,7 @@ const typeDefs = `#graphql
     """
     Updates a company by id
     """
-    updateCompany(_id: ID!, name: String, description: String, zipCode: Int, street: String, houseNumber: Int): Company
+    updateCompany(_id: ID!, name: String, description: String, zipCode: Int, streetName: String, houseNumber: Int): Company
     """
     Deletes a company by id
     """
