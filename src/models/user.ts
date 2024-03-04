@@ -44,6 +44,10 @@ const userSchema = new mongoose.Schema<IUser>(
       required: true,
       message: "ObjectId of an address is required",
     },
+    company: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company",
+    },
   },
   {
     timestamps: true,
@@ -58,6 +62,10 @@ userSchema.pre(/^find/, function (next) {
     })
     .populate({
       path: "address",
+      select: "-__v",
+    })
+    .populate({
+      path: "company",
       select: "-__v",
     });
   next();

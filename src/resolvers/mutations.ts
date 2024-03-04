@@ -10,6 +10,8 @@ import {
 } from "./serviceResolvers";
 import { createUser, deleteUser, updateUser } from "./userResolvers";
 import { createAddress, deleteAddress, updateAddress } from "./addressResolver";
+import { createAdmin, createCompany, deleteAdmin, deleteCompany, updateCompany } from "./companyResolver";
+import { create } from "domain";
 
 export const Mutation = {
   // CRUD FOR BOOKING
@@ -39,4 +41,16 @@ export const Mutation = {
   updateAddress: updateAddress,
 
   deleteAddress: deleteAddress,
+
+  // CRUD FOR COMPANY
+  createCompany: createCompany,
+
+  updateCompany: updateCompany,
+
+  deleteCompany: deleteCompany,
+
+  deleteAdmin: deleteAdmin,
+
+  createAdmin: createAdmin
+
 };

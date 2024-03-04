@@ -10,6 +10,8 @@ const typeDefs = `#graphql
     Returns a booking by id 
     """
     booking(_id: ID!): Booking
+    
+    
     """
     Returns all the services
     """
@@ -19,6 +21,7 @@ const typeDefs = `#graphql
     """
     service(_id: ID!): Service
 
+    
     """
     Returns all the users
     """
@@ -32,6 +35,7 @@ const typeDefs = `#graphql
     """
     login(email: String!, password: String!): User
     
+    
     """
     Returns all the addresses
     """
@@ -40,6 +44,16 @@ const typeDefs = `#graphql
     Returns an address by id
     """
     address(_id: ID!): Address
+    
+    
+    """
+    Returns all the companies
+    """
+    companies: [Company]
+    """
+    Returns a company by id
+    """
+    company(_id: ID!): Company
   }
 
   type Mutation {
@@ -97,6 +111,28 @@ const typeDefs = `#graphql
     Deletes an address by id
     """
     deleteAddress(_id: ID!): Address
+    """
+    Create Admin for company
+    """
+    createAdmin(firstName: String!, lastName: String!, email: String!, password: String!, role: Role!, zipCode: Int!, street: String!, houseNumber: Int!, companyId: ID!): User
+    
+    """
+    Creates a new company
+    """
+    createCompany(name: String!, description: String!, zipCode: Int!, street: String!, houseNumber: Int!, companyOwnerId: ID!): Company
+    """
+    Updates a company by id
+    """
+    updateCompany(_id: ID!, name: String, description: String, zipCode: Int, street: String, houseNumber: Int): Company
+    """
+    Deletes a company by id
+    """
+    deleteCompany(_id: ID!): Company
+    """
+    Remove admin from company
+    """
+    deleteAdmin(userId: ID!, companyId: ID!): Company
+    
   }
 
   type Booking {
@@ -135,6 +171,7 @@ const typeDefs = `#graphql
     role: Role!
     cases: [Case]!
     address: Address!
+    company: Company 
   }
 
   enum Role {
@@ -149,6 +186,24 @@ const typeDefs = `#graphql
     zipCode: Int!
     street: String!
     houseNumber: Int!
+  }
+
+  type Company {
+    _id: ID!
+    name: String!
+    services: [Service]!
+    Address: Address!
+    description: String!
+    openForBooking: Boolean!
+    bustle: Bustle
+    admins: [User]!
+    owner: User
+  }
+
+  enum Bustle {
+    LOW,
+    MEDIUM,
+    HIGH
   }
 `;
 
