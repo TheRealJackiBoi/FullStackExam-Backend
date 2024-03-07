@@ -37,6 +37,20 @@ export interface IService {
   estimatedTime: number;
 }
 
+export interface IAuth {
+  _id: ObjectId;
+  email: string;
+  password: string;
+  user: ObjectId;
+}
+
+export interface IAuthInput {
+  _id?: ObjectId;
+  email: string;
+  password: string;
+  user: IUserInput;
+}
+
 export interface IUser {
   _id?: ObjectId;
   firstName: string;
@@ -44,8 +58,6 @@ export interface IUser {
   role: Role;
   cases: ICase[];
   address: IAddress;
-  email: string;
-  password: string;
 }
 
 export interface IUserInput {
@@ -54,8 +66,6 @@ export interface IUserInput {
   lastName: string;
   role: Role;
   cases: ICase[];
-  email: string;
-  password: string;
   zipCode: number;
   street: string;
   houseNumber: number;
