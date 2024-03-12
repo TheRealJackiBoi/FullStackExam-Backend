@@ -8,10 +8,11 @@ import { typeDefs } from "./schema";
 import mongoose from "mongoose";
 import "dotenv/config";
 import resolvers from "./resolvers/resolvers";
-import { IAddress, IBooking, IService, IUser } from "./types/types";
+import { IAddress, IBooking, IService, IUser, IAuth } from "./types/types";
 import { Booking } from "./models/booking";
 import Service from "./models/service";
 import User from "./models/user";
+import Auth from "./models/auth";
 import Address from "./models/address";
 
 const uri: string = process.env.MONGODB_URI!;
@@ -20,6 +21,7 @@ export interface IContext {
   dataSources: {
     Bookings: mongoose.Model<IBooking>;
     Services: mongoose.Model<IService>;
+    Auth: mongoose.Model<IAuth>;
     Users: mongoose.Model<IUser>;
     Addresses: mongoose.Model<IAddress>;
   };
@@ -56,6 +58,7 @@ app.use(
         dataSources: {
           Bookings: Booking,
           Services: Service,
+          Auth: Auth,
           Users: User,
           Addresses: Address,
         },

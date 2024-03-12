@@ -1,7 +1,20 @@
 import { GraphQLError } from "graphql";
 import { IContext } from "../server";
-import { IAddress, IBooking, IUser } from "../types/types";
+import { IAddress, IBooking, IUser, IAuth } from "../types/types";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { ObjectId } from "mongodb";
+
+const createToken = (user: IUser): string => {
+  if (!user._id) throw new GraphQLError("User id is not defined");
+  return jwt.sign(
+    { id: user._id!, role: user.role! },
+    process.env.JWT_SECRET!,
+    {
+      expiresIn: "7d",
+    }
+  );
+};
 
 export const Query = {
   hello: () => "Hello World",
@@ -88,24 +101,34 @@ export const Query = {
 
   login: async (
     parent: never,
-    { email, password }: IUser,
+    { email, password }: IAuth,
     { dataSources }: IContext
   ) => {
-    const { Users } = dataSources;
+    const { Users, Auth } = dataSources;
 
-    const user = await Users.findOne({ email: email });
+    const auth = await Auth.findOne({ email: email });
 
-    if (!user) {
+    if (!auth) {
       throw new GraphQLError("Email or password is incorrect");
     }
 
-    const validPassword = await bcrypt.compare(password, user.password);
+    const validPassword = await bcrypt.compare(password, auth.password);
 
     if (!validPassword) {
       throw new GraphQLError("Email or password is incorrect");
     }
 
-    return user;
+    let id = new ObjectId(auth.user);
+
+    const user = await Users.findById(id);
+
+    if (!user) {
+      throw new GraphQLError("User not found");
+    }
+
+    const token = createToken(user);
+
+    return { user, email, token };
   },
 
   addresses: async (parent: never, args: never, { dataSources }: IContext) => {
