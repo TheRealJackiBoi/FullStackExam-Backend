@@ -5,11 +5,15 @@ const typeDefs = `#graphql
     """
     Returns all the bookings
     """
-    bookings: [Booking]
+    bookings(token: String!): [Booking]
     """
     Returns a booking by id 
     """
-    booking(_id: ID!): Booking
+    booking(_id: ID!, token: String!): Booking
+    """
+    Returns all the bookings by user
+    """
+    bookingsByUser(_id: ID!, token: String!): [Booking]
     
     
     """

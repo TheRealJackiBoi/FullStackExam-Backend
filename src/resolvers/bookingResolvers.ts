@@ -1,38 +1,113 @@
-import { IBookingInput } from "../types/types";
+import { IBooking, IBookingInput } from "../types/types";
 import { IContext } from "../server";
+import { GraphQLError } from "graphql";
 
-export const createBooking = async (parent: never, { startTime, endTime, status, device, cost, serviceId }: IBookingInput, { dataSources }: IContext) => {
-    const { Bookings } = dataSources;
+export const booking = async (
+  parent: never,
+  { _id }: IBooking,
+  { dataSources }: IContext
+) => {
+  const { Bookings } = dataSources;
 
-    const service = await dataSources.Services.findById(serviceId)
+  const res = await Bookings.findById(_id);
 
-    if (!service) {
-      throw new Error("Service not found")
-    }
-
-    const res = await Bookings.create({ startTime, endTime, status, case: { device, cost, service: service._id } });
-
-    return res;
+  if (!res) {
+    throw new GraphQLError("No booking found with id: " + _id);
   }
 
-export const updateBooking = async (parent: never, { _id, startTime, endTime, status, device, cost, serviceId }: IBookingInput, { dataSources }: IContext) => {
-    const { Bookings } = dataSources;
+  return res;
+};
 
-    const service = await dataSources.Services.findById(serviceId)
+export const bookings = async (
+  parent: never,
+  args: never,
+  { dataSources }: IContext
+) => {
+  const { Bookings } = dataSources;
 
-    if (!service) {
-      throw new Error("Service not found")
-    }
+  const res = await Bookings.find();
 
-    const res = await Bookings.findByIdAndUpdate(_id, { startTime, endTime, status, case: { device, cost, service: service._id } }, { new: true });
-
-    return res;
+  if (!res) {
+    throw new GraphQLError("No bookings found");
   }
 
-export const deleteBooking = async (parent: never, { _id }: IBookingInput, { dataSources }: IContext) => {
-    const { Bookings } = dataSources;
+  return res;
+};
 
-    const res = await Bookings.findByIdAndDelete(_id);
+export const bookingsByUser = async (
+  parent: never,
+  { _id }: IBooking,
+  { dataSources }: IContext
+) => {
+  const { Bookings } = dataSources;
 
-    return res;
+  const res = await Bookings.find({ "case.user": _id });
+
+  if (!res) {
+    throw new GraphQLError("No bookings found for user with id: " + _id);
   }
+
+  return res;
+}
+
+export const createBooking = async (
+  parent: never,
+  { startTime, endTime, status, device, cost, serviceId }: IBookingInput,
+  { dataSources }: IContext
+) => {
+  const { Bookings } = dataSources;
+
+  const service = await dataSources.Services.findById(serviceId);
+
+  if (!service) {
+    throw new Error("Service not found");
+  }
+
+  const res = await Bookings.create({
+    startTime,
+    endTime,
+    status,
+    case: { device, cost, service: service._id },
+  });
+
+  return res;
+};
+
+export const updateBooking = async (
+  parent: never,
+  { _id, startTime, endTime, status, device, cost, serviceId }: IBookingInput,
+  { dataSources }: IContext
+) => {
+  const { Bookings } = dataSources;
+
+  const service = await dataSources.Services.findById(serviceId);
+
+  if (!service) {
+    throw new Error("Service not found");
+  }
+
+  const res = await Bookings.findByIdAndUpdate(
+    _id,
+    {
+      startTime,
+      endTime,
+      status,
+      case: { device, cost, service: service._id },
+    },
+    { new: true }
+  );
+
+  return res;
+};
+
+export const deleteBooking = async (
+  parent: never,
+  { _id }: IBookingInput,
+  { dataSources }: IContext
+) => {
+  const { Bookings } = dataSources;
+
+  const res = await Bookings.findByIdAndDelete(_id);
+
+  return res;
+};

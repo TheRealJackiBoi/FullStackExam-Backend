@@ -1,9 +1,11 @@
 import { GraphQLError } from "graphql";
 import { IContext } from "../server";
-import { IAddress, IBooking, IUser, IAuth } from "../types/types";
+import { IAddress, IBooking, IUser, IAuth, Role } from "../types/types";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { ObjectId } from "mongodb";
+import { auth } from "./decorator";
+import { bookings, booking, bookingsByUser } from "./bookingResolvers";
 
 const createToken = (user: IUser): string => {
   if (!user._id) throw new GraphQLError("User id is not defined");
@@ -19,33 +21,11 @@ const createToken = (user: IUser): string => {
 export const Query = {
   hello: () => "Hello World",
 
-  bookings: async (parent: never, args: never, { dataSources }: IContext) => {
-    const { Bookings } = dataSources;
+  bookings: auth([Role.USER, Role.ADMIN, Role.COMPANYADMIN, Role.COMPANYOWNER], bookings),
 
-    const res = await Bookings.find();
+  booking: auth([Role.USER, Role.ADMIN, Role.COMPANYADMIN, Role.COMPANYOWNER], booking),
 
-    if (!res) {
-      throw new GraphQLError("No bookings found");
-    }
-
-    return res;
-  },
-
-  booking: async (
-    parent: never,
-    { _id }: IBooking,
-    { dataSources }: IContext
-  ) => {
-    const { Bookings } = dataSources;
-
-    const res = await Bookings.findById(_id);
-
-    if (!res) {
-      throw new GraphQLError("No booking found with id: " + _id);
-    }
-
-    return res;
-  },
+  bookingsByUser: auth([Role.USER, Role.ADMIN, Role.COMPANYADMIN, Role.COMPANYOWNER], bookingsByUser),
 
   services: async (parent: never, args: never, { dataSources }: IContext) => {
     const { Services } = dataSources;
