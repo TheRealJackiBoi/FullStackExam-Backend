@@ -29,11 +29,11 @@ const typeDefs = `#graphql
     """
     Returns all the users
     """
-    users(token: String!): [User]
+    users(token: String!, token: String!): [User]
     """
     Returns a user by id
     """
-    user(_id: ID!): User
+    user(_id: ID!, token: String!): User
     """
     Returns user if email and password are correct
     """

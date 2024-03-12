@@ -23,7 +23,7 @@ export const Query = {
 
   users: auth([ Role.ADMIN ], users),
 
-  user: user,
+  user: auth([ Role.USER, Role.ADMIN, Role.COMPANYADMIN, Role.COMPANYOWNER ], user ),
 
   login: login,
 
