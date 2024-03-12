@@ -158,4 +158,28 @@ export const Query = {
 
     return res;
   },
+
+  companies: async (parent: never, args: never, { dataSources }: IContext) => {
+    const { Companies } = dataSources;
+
+    const res = await Companies.find();
+
+    if (!res) {
+      throw new GraphQLError("No companies found");
+    }
+
+    return res;
+  },
+
+  company: async (parent: never, { _id }: IAddress, { dataSources }: IContext) => {
+    const { Companies } = dataSources;
+
+    const res = await Companies.findById(_id);
+
+    if (!res) {
+      throw new GraphQLError("No company found with id: " + _id);
+    }
+
+    return res;
+  },
 };

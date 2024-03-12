@@ -34,6 +34,10 @@ const userSchema = new mongoose.Schema<IUser>(
       required: true,
       message: "ObjectId of an address is required",
     },
+    company: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company",
+    },
   },
   {
     timestamps: true,
@@ -41,6 +45,9 @@ const userSchema = new mongoose.Schema<IUser>(
 );
 
 userSchema.pre(/^find/, function (next) {
+  if ((this as any).options._recursed) {
+    return next();
+  }
   (this as any)
     .populate({
       path: "cases",
@@ -49,6 +56,11 @@ userSchema.pre(/^find/, function (next) {
     .populate({
       path: "address",
       select: "-__v",
+    })
+    .populate({
+      path: "company",
+      select: "-__v",
+      options: { _recursed: true },
     });
   next();
 });

@@ -58,6 +58,7 @@ export interface IUser {
   role: Role;
   cases: ICase[];
   address: IAddress;
+  company?: ICompany | ObjectId;
 }
 
 export interface IUserInput {
@@ -69,6 +70,7 @@ export interface IUserInput {
   zipCode: number;
   street: string;
   houseNumber: number;
+  companyId?: ObjectId;
 }
 
 export enum Role {
@@ -83,4 +85,32 @@ export interface IAddress {
   zipCode: number;
   street: string;
   houseNumber: number;
+}
+
+export interface ICompany {
+  _id?: ObjectId;
+  name: string;
+  address: IAddress;
+  services: IService[];
+  description: string;
+  admins?: ObjectId[];
+  owner?: ObjectId;
+  openForBooking: boolean;
+  bustle?: Bustle;
+}
+
+export enum Bustle {
+  LOW = "LOW",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH"
+}
+
+export interface ICompanyInput { 
+  _id?: ObjectId,
+  name: string, 
+  description: String, 
+  zipCode: number, 
+  streetName: String, 
+  houseNumber: number,
+  companyOwnerId: ObjectId
 }
