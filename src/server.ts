@@ -8,10 +8,11 @@ import { typeDefs } from "./schema";
 import mongoose from "mongoose";
 import "dotenv/config";
 import resolvers from "./resolvers/resolvers";
-import { IAddress, IBooking, ICompany, IService, IUser } from "./types/types";
+import { IAddress, IBooking, ICompany, IService, IUser, IAuth } from "./types/types";
 import { Booking } from "./models/booking";
 import Service from "./models/service";
 import User from "./models/user";
+import Auth from "./models/auth";
 import Address from "./models/address";
 import Company from "./models/company";
 
@@ -21,6 +22,7 @@ export interface IContext {
   dataSources: {
     Bookings: mongoose.Model<IBooking>;
     Services: mongoose.Model<IService>;
+    Auth: mongoose.Model<IAuth>;
     Users: mongoose.Model<IUser>;
     Addresses: mongoose.Model<IAddress>;
     Companies: mongoose.Model<ICompany>;
@@ -58,6 +60,7 @@ app.use(
         dataSources: {
           Bookings: Booking,
           Services: Service,
+          Auth: Auth,
           Users: User,
           Addresses: Address,
           Companies: Company,

@@ -3,16 +3,6 @@ import { IUser, Role } from "../types/types";
 
 const userSchema = new mongoose.Schema<IUser>(
   {
-    email: {
-      type: String,
-      required: true,
-      message: "Email is required",
-    },
-    password: {
-      type: String,
-      required: true,
-      message: "Password is required",
-    },
     firstName: {
       type: String,
       required: true,

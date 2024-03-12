@@ -8,7 +8,8 @@ import {
   deleteService,
   updateService,
 } from "./serviceResolvers";
-import { createUser, deleteUser, updateUser } from "./userResolvers";
+import { deleteUser, updateUser } from "./userResolvers";
+import { createUser } from "./authResolver";
 import { createAddress, deleteAddress, updateAddress } from "./addressResolver";
 import { createAdmin, createCompany, deleteAdmin, deleteCompany, updateCompany } from "./companyResolver";
 import { create } from "domain";

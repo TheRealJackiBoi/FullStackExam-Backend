@@ -33,7 +33,7 @@ const typeDefs = `#graphql
     """
     Returns user if email and password are correct
     """
-    login(email: String!, password: String!): User
+    login(email: String!, password: String!): Auth
     
     
     """
@@ -88,9 +88,9 @@ const typeDefs = `#graphql
     """
     Creates a new user
     """
-    createUser(firstName: String!, lastName: String!, email: String!, password: String!, role: Role!, zipCode: Int!, street: String!, houseNumber: Int!): User
+    createUser(email: String!, password: String!, user: UserInput!): User
     """
-    TODO: RUD operations for user
+    TODO: CRUD operations for user
     """
     updateUser(_id: ID!, firstName: String, lastName: String, role: Role, zipCode: Int, street: String, houseNumber: Int): User
     """
@@ -162,12 +162,16 @@ const typeDefs = `#graphql
     estimatedTime: Int!
   }
 
+  type Auth {
+    user: User!
+    email: String!
+    token: String!
+  }
+
   type User {
     _id: ID!
     firstName: String!
     lastName: String!
-    email: String!
-    password: String!
     role: Role!
     cases: [Case]!
     address: Address!
@@ -204,6 +208,17 @@ const typeDefs = `#graphql
     LOW,
     MEDIUM,
     HIGH
+  }
+  
+  # input types
+
+  input UserInput {
+    firstName: String!
+    lastName: String!
+    role: Role!
+    zipCode: Int!
+    street: String!
+    houseNumber: Int!
   }
 `;
 
