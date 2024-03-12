@@ -1,5 +1,30 @@
+import { GraphQLError } from 'graphql';
 import { IContext } from '../server';
-import { ICompanyInput, Role } from '../types/types';
+import { IAddress, ICompanyInput, Role } from '../types/types';
+
+export const companies = async (parent: never, args: never, { dataSources }: IContext) => {
+    const { Companies } = dataSources;
+
+    const res = await Companies.find();
+
+    if (!res) {
+      throw new GraphQLError("No companies found");
+    }
+
+    return res;
+  }
+
+  export const company = async (parent: never, { _id }: IAddress, { dataSources }: IContext) => {
+    const { Companies } = dataSources;
+
+    const res = await Companies.findById(_id);
+
+    if (!res) {
+      throw new GraphQLError("No company found with id: " + _id);
+    }
+
+    return res;
+  }
 
 export const createCompany = async (parent: never, { name, description, zipCode, streetName, houseNumber, companyOwnerId }: ICompanyInput, { dataSources }: IContext) => {
     const { Companies, Users, Addresses } = dataSources;

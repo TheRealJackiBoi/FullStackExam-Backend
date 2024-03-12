@@ -1,5 +1,30 @@
+import { GraphQLError } from "graphql";
 import { IContext } from "../server";
 import { IUserInput, IUser } from "../types/types";
+
+export const users = async (parent: never, args: never, { dataSources }: IContext) => {
+  const { Users } = dataSources;
+
+  const res = await Users.find();
+
+  if (!res) {
+    throw new GraphQLError("No users found");
+  }
+
+  return res;
+}
+
+export const user = async (parent: never, { _id }: IUser, { dataSources }: IContext) => {
+  const { Users } = dataSources;
+
+  const res = await Users.findById(_id);
+
+  if (!res) {
+    throw new GraphQLError("No user found with id: " + _id);
+  }
+
+  return res;
+}
 
 export const updateUser = async (
   parent: never,
