@@ -1,6 +1,6 @@
 import { GraphQLError } from "graphql";
-import { IContext } from "../server";
-import { IAuth, IAuthInput, IUser } from "../types/types";
+import { IContext } from "../../server";
+import { IAuth, IAuthInput, IUser } from "../../types/types";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { ObjectId } from "mongodb";

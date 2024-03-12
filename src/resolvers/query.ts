@@ -1,11 +1,11 @@
 import { Role } from "../types/types";
 import { auth } from "./decorator";
-import { bookings, booking, bookingsByUser } from "./bookingResolvers";
-import { service, services } from "./serviceResolvers";
-import { user, users } from "./userResolvers";
-import { login } from "./authResolver";
-import { address, addresses } from "./addressResolver";
-import { companies, company } from "./companyResolver";
+import { bookings, booking, bookingsByUser } from "./booking/bookingResolvers";
+import { service, services } from "./service/serviceResolvers";
+import { user, users } from "./user/userResolvers";
+import { login } from "./auth/authResolver";
+import { address, addresses } from "./address/addressResolver";
+import { companies, company } from "./company/companyResolver";
 
 
 export const Query = {
@@ -21,15 +21,15 @@ export const Query = {
 
   service: service,
 
-  users: users,
+  users: auth([ Role.ADMIN ], users),
 
   user: user,
 
   login: login,
 
-  addresses: addresses,
+  addresses: auth([ Role.ADMIN ], addresses),
 
-  address: address,
+  address: auth([ Role.USER, Role.ADMIN, Role.COMPANYADMIN, Role.COMPANYOWNER ], address ),
 
   companies: companies,
 

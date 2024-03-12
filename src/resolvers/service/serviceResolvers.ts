@@ -1,6 +1,6 @@
 import { GraphQLError } from 'graphql';
-import { IContext } from '../server'
-import { IBooking } from '../types/types';
+import { IContext } from '../../server'
+import { IBooking } from '../../types/types';
 
 export const service = async (
   parent: never,

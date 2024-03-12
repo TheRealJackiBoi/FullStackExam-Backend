@@ -1,6 +1,6 @@
 import { GraphQLError } from "graphql";
-import { IContext } from "../server";
-import { IUserInput, IUser } from "../types/types";
+import { IContext } from "../../server";
+import { IUserInput, IUser } from "../../types/types";
 
 export const users = async (parent: never, args: never, { dataSources }: IContext) => {
   const { Users } = dataSources;
