@@ -7,9 +7,13 @@ import { ObjectId } from "mongodb";
 
 const createToken = (user: IUser): string => {
   if (!user._id) throw new GraphQLError("User id is not defined");
-  return jwt.sign({ id: user._id! }, process.env.JWT_SECRET!, {
-    expiresIn: "7d",
-  });
+  return jwt.sign(
+    { id: user._id!, role: user.role! },
+    process.env.JWT_SECRET!,
+    {
+      expiresIn: "7d",
+    }
+  );
 };
 
 export const Query = {
@@ -123,9 +127,8 @@ export const Query = {
     }
 
     const token = createToken(user);
-    console.log(token);
 
-    return { user, token };
+    return { user, email, token };
   },
 
   addresses: async (parent: never, args: never, { dataSources }: IContext) => {

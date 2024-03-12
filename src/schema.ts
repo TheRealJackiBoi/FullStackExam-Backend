@@ -128,6 +128,7 @@ const typeDefs = `#graphql
 
   type Auth {
     user: User!
+    email: String!
     token: String!
   }
 

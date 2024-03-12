@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { IAuth } from "../types/types";
 
-const userSchema = new mongoose.Schema<IAuth>(
+const authSchema = new mongoose.Schema<IAuth>(
   {
     email: {
       type: String,
@@ -25,6 +25,6 @@ const userSchema = new mongoose.Schema<IAuth>(
   }
 );
 
-const Auth = mongoose.model<IAuth>("Auth", userSchema);
+const Auth = mongoose.model<IAuth>("Auth", authSchema);
 
 export default Auth;
