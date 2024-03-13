@@ -2,56 +2,58 @@ import {
   createBooking,
   deleteBooking,
   updateBooking,
-} from "./bookingResolvers";
+} from "./booking/bookingResolvers";
 import {
   createService,
   deleteService,
   updateService,
-} from "./serviceResolvers";
-import { deleteUser, updateUser } from "./userResolvers";
-import { createUser } from "./authResolver";
-import { createAddress, deleteAddress, updateAddress } from "./addressResolver";
-import { createAdmin, createCompany, deleteAdmin, deleteCompany, updateCompany } from "./companyResolver";
+} from "./service/serviceResolvers";
+import { deleteUser, updateUser } from "./user/userResolvers";
+import { createUser } from "./auth/authResolver";
+import { createAddress, deleteAddress, updateAddress } from "./address/addressResolver";
+import { createCompany, createCompanyAdmin, deleteCompany, deleteCompanyAdmin, updateCompany } from "./company/companyResolver";
 import { create } from "domain";
+import { auth } from "./decorator";
+import { Role } from "../types/types";
 
 export const Mutation = {
   // CRUD FOR BOOKING
-  createBooking: createBooking,
+  createBooking: auth([ Role.USER, Role.ADMIN, Role.COMPANYADMIN, Role.COMPANYOWNER ], createBooking ),
 
-  updateBooking: updateBooking,
+  updateBooking: auth([ Role.USER, Role.ADMIN, Role.COMPANYADMIN, Role.COMPANYOWNER ], updateBooking ),
 
-  deleteBooking: deleteBooking,
+  deleteBooking: auth([ Role.USER, Role.ADMIN, Role.COMPANYADMIN, Role.COMPANYOWNER ], deleteBooking ),
 
   // CRUD FOR SERVICE
-  createService: createService,
+  createService: auth([ Role.COMPANYOWNER, Role.COMPANYADMIN ], createService ),
 
-  updateService: updateService,
+  updateService: auth([ Role.COMPANYOWNER, Role.COMPANYADMIN ], updateService ),
 
-  deleteService: deleteService,
+  deleteService: auth([ Role.COMPANYOWNER, Role.COMPANYADMIN ], deleteService ),
 
   // CRUD FOR USER
   createUser: createUser,
 
-  updateUser: updateUser,
+  updateUser: auth([ Role.USER, Role.ADMIN, Role.COMPANYADMIN, Role.COMPANYOWNER ], updateUser ),
 
-  deleteUser: deleteUser,
+  deleteUser: auth([ Role.USER, Role.ADMIN, Role.COMPANYADMIN, Role.COMPANYOWNER ], deleteUser ),
 
   // CRUD FOR ADDRESS
   createAddress: createAddress,
 
-  updateAddress: updateAddress,
+  updateAddress: auth([ Role.USER, Role.ADMIN, Role.COMPANYADMIN, Role.COMPANYOWNER ], updateAddress ),
 
-  deleteAddress: deleteAddress,
+  deleteAddress: auth([ Role.USER, Role.ADMIN, Role.COMPANYADMIN, Role.COMPANYOWNER ], deleteAddress ),
 
   // CRUD FOR COMPANY
-  createCompany: createCompany,
+  createCompany: auth([ Role.USER, Role.ADMIN ], createCompany ),
 
-  updateCompany: updateCompany,
+  updateCompany: auth([ Role.COMPANYOWNER, Role.COMPANYADMIN], updateCompany ),
 
-  deleteCompany: deleteCompany,
+  deleteCompany: auth([ Role.COMPANYOWNER ], deleteCompany ),
 
-  deleteAdmin: deleteAdmin,
+  deleteCompanyAdmin: auth([ Role.ADMIN, Role.COMPANYOWNER ], deleteCompanyAdmin ),
 
-  createAdmin: createAdmin
+  createCompanyAdmin: auth([ Role.ADMIN, Role.COMPANYOWNER ], createCompanyAdmin )
 
 };

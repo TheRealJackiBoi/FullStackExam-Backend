@@ -1,5 +1,5 @@
-import { IBooking, IBookingInput } from "../types/types";
-import { IContext } from "../server";
+import { IBooking, IBookingInput } from "../../types/types";
+import { IContext } from "../../server";
 import { GraphQLError } from "graphql";
 
 export const booking = async (

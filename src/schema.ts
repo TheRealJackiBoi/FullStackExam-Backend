@@ -29,11 +29,11 @@ const typeDefs = `#graphql
     """
     Returns all the users
     """
-    users: [User]
+    users(token: String!): [User]
     """
     Returns a user by id
     """
-    user(_id: ID!): User
+    user(_id: ID!, token: String!): User
     """
     Returns user if email and password are correct
     """
@@ -43,11 +43,11 @@ const typeDefs = `#graphql
     """
     Returns all the addresses
     """
-    addresses: [Address]
+    addresses(token: String!): [Address]
     """
     Returns an address by id
     """
-    address(_id: ID!): Address
+    address(_id: ID!, token: String!): Address
     
     
     """
@@ -64,29 +64,29 @@ const typeDefs = `#graphql
     """
     Creates a new booking
     """
-    createBooking(startTime: String!, endTime: String!, status: Status!, device: String!, cost: Float!, serviceId: ID! ): Booking
+    createBooking(startTime: String!, endTime: String!, status: Status!, device: String!, cost: Float!, serviceId: ID!, token: String! ): Booking
     """
     Updates a booking by id
     """
-    updateBooking(_id: ID!, startTime: String, endTime: String, status: Status, device: String!, cost: Float!, serviceId: ID! ): Booking
+    updateBooking(_id: ID!, startTime: String, endTime: String, status: Status, device: String!, cost: Float!, serviceId: ID!, token: String! ): Booking
     """
     Deletes a booking by id
     """
-    deleteBooking(_id: ID!): Booking
+    deleteBooking(_id: ID!, token: String!): Booking
 
 
     """
     Creates a new service
     """
-    createService(name: String!, estimatedTime: Int!): Service
+    createService(name: String!, estimatedTime: Int!, token: String!): Service
     """
     Updates a service by id
     """
-    updateService(_id: ID!, name: String, estimatedTime: Int): Service
+    updateService(_id: ID!, name: String, estimatedTime: Int, token: String!): Service
     """
     Deletes a service by id
     """
-    deleteService(_id: ID!): Service
+    deleteService(_id: ID!, token: String!): Service
 
 
     """
@@ -96,11 +96,11 @@ const typeDefs = `#graphql
     """
     TODO: CRUD operations for user
     """
-    updateUser(_id: ID!, firstName: String, lastName: String, role: Role, zipCode: Int, street: String, houseNumber: Int): User
+    updateUser(_id: ID!, firstName: String, lastName: String, role: Role, zipCode: Int, street: String, houseNumber: Int, token: String!): User
     """
     Deletes a user by id
     """
-    deleteUser(_id: ID!): User
+    deleteUser(_id: ID!, token: String!): User
 
 
     """
@@ -110,32 +110,32 @@ const typeDefs = `#graphql
     """
     Updates an address by id
     """
-    updateAddress(_id: ID!, zipCode: Int, street: String, houseNumber: Int): Address
+    updateAddress(_id: ID!, zipCode: Int, street: String, houseNumber: Int, token: String!): Address
     """
     Deletes an address by id
     """
-    deleteAddress(_id: ID!): Address
+    deleteAddress(_id: ID!, token: String!): Address
     """
     Create Admin for company
     """
-    createAdmin(firstName: String!, lastName: String!, email: String!, password: String!, role: Role!, zipCode: Int!, street: String!, houseNumber: Int!, companyId: ID!): User
+    createCompanyAdmin(firstName: String!, lastName: String!, email: String!, password: String!, role: Role!, zipCode: Int!, street: String!, houseNumber: Int!, companyId: ID!, token: String!): User
     
     """
     Creates a new company
     """
-    createCompany(name: String!, description: String!, zipCode: Int!, street: String!, houseNumber: Int!, companyOwnerId: ID!): Company
+    createCompany(name: String!, description: String!, zipCode: Int!, street: String!, houseNumber: Int!, companyOwnerId: ID!, token: String!): Company
     """
     Updates a company by id
     """
-    updateCompany(_id: ID!, name: String, description: String, zipCode: Int, streetName: String, houseNumber: Int): Company
+    updateCompany(_id: ID!, name: String, description: String, zipCode: Int, streetName: String, houseNumber: Int, token: String!): Company
     """
     Deletes a company by id
     """
-    deleteCompany(_id: ID!): Company
+    deleteCompany(_id: ID!, token: String!): Company
     """
     Remove admin from company
     """
-    deleteAdmin(userId: ID!, companyId: ID!): Company
+    deleteCompanyAdmin(userId: ID!, companyId: ID!, token: String!): Company
     
   }
 

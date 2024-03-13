@@ -1,7 +1,9 @@
-import { IContext } from "../server";
-import { IAuthInput } from "../types/types";
-
+import { GraphQLError } from "graphql";
+import { IContext } from "../../server";
+import { IAuth, IAuthInput, IUser } from "../../types/types";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { ObjectId } from "mongodb";
 
 export const createUser = async (
   parent: never,
@@ -67,4 +69,48 @@ export const createUser = async (
   });
 
   return res;
+};
+
+export const login = async (
+  parent: never,
+  { email, password }: IAuth,
+  { dataSources }: IContext
+) => {
+  const { Users, Auth } = dataSources;
+
+  const auth = await Auth.findOne({ email: email });
+
+  if (!auth) {
+    throw new GraphQLError("Email or password is incorrect");
+  }
+
+  const validPassword = await bcrypt.compare(password, auth.password);
+
+  if (!validPassword) {
+    throw new GraphQLError("Email or password is incorrect");
+  }
+
+  let id = new ObjectId(auth.user);
+
+  const user = await Users.findById(id);
+
+  if (!user) {
+    throw new GraphQLError("User not found");
+  }
+
+  const token = createToken(user);
+
+  return { user, email, token };
+}
+
+
+const createToken = (user: IUser): string => {
+  if (!user._id) throw new GraphQLError("User id is not defined");
+  return jwt.sign(
+    { id: user._id!, role: user.role! },
+    process.env.JWT_SECRET!,
+    {
+      expiresIn: "7d",
+    }
+  );
 };
