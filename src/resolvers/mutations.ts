@@ -11,7 +11,7 @@ import {
 import { deleteUser, updateUser } from "./user/userResolvers";
 import { createUser } from "./auth/authResolver";
 import { createAddress, deleteAddress, updateAddress } from "./address/addressResolver";
-import { createAdmin, createCompany, deleteAdmin, deleteCompany, updateCompany } from "./company/companyResolver";
+import { createCompany, createCompanyAdmin, deleteCompany, deleteCompanyAdmin, updateCompany } from "./company/companyResolver";
 import { create } from "domain";
 import { auth } from "./decorator";
 import { Role } from "../types/types";
@@ -52,8 +52,8 @@ export const Mutation = {
 
   deleteCompany: auth([ Role.COMPANYOWNER ], deleteCompany ),
 
-  deleteAdmin: auth([ Role.ADMIN, Role.COMPANYOWNER ], deleteAdmin ),
+  deleteCompanyAdmin: auth([ Role.ADMIN, Role.COMPANYOWNER ], deleteCompanyAdmin ),
 
-  createAdmin: auth([ Role.ADMIN, Role.COMPANYOWNER ], createAdmin )
+  createCompanyAdmin: auth([ Role.ADMIN, Role.COMPANYOWNER ], createCompanyAdmin )
 
 };

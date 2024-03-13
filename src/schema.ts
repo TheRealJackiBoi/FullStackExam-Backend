@@ -29,7 +29,7 @@ const typeDefs = `#graphql
     """
     Returns all the users
     """
-    users(token: String!, token: String!): [User]
+    users(token: String!): [User]
     """
     Returns a user by id
     """
@@ -118,7 +118,7 @@ const typeDefs = `#graphql
     """
     Create Admin for company
     """
-    createAdmin(firstName: String!, lastName: String!, email: String!, password: String!, role: Role!, zipCode: Int!, street: String!, houseNumber: Int!, companyId: ID!, token: String!): User
+    createCompanyAdmin(firstName: String!, lastName: String!, email: String!, password: String!, role: Role!, zipCode: Int!, street: String!, houseNumber: Int!, companyId: ID!, token: String!): User
     
     """
     Creates a new company
@@ -135,7 +135,7 @@ const typeDefs = `#graphql
     """
     Remove admin from company
     """
-    deleteAdmin(userId: ID!, companyId: ID!, token: String!): Company
+    deleteCompanyAdmin(userId: ID!, companyId: ID!, token: String!): Company
     
   }
 
