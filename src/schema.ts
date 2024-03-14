@@ -78,11 +78,11 @@ const typeDefs = `#graphql
     """
     Creates a new service
     """
-    createService(name: String!, estimatedTime: Int!, token: String!): Service
+    createService(name: String!, estimatedTime: Int!, estimatedPrice: Float!, imageUrl: String!, token: String!): Service
     """
     Updates a service by id
     """
-    updateService(_id: ID!, name: String, estimatedTime: Int, token: String!): Service
+    updateService(_id: ID!, name: String, estimatedTime: Int, estimatedPrice: Float, imageUrl: String!, token: String!): Service
     """
     Deletes a service by id
     """
@@ -164,6 +164,8 @@ const typeDefs = `#graphql
     _id: ID!
     name: String!
     estimatedTime: Int!
+    estimatedPrice: Float!
+    imageUrl: String
   }
 
   type Auth {

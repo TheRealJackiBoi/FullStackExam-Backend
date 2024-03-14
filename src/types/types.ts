@@ -35,6 +35,9 @@ export interface IService {
   _id: ObjectId;
   name: string;
   estimatedTime: number;
+  estimatedPrice: number;
+  imageUrl: string;
+  
 }
 
 export interface IAuth {
