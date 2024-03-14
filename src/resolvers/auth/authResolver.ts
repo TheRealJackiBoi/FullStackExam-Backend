@@ -18,7 +18,7 @@ export const createUser = async (
 
   const exsistingUser = await Auth.findOne({ email: email });
   if (exsistingUser) {
-    throw new Error("User already exists");
+    throw new GraphQLError("User already exists");
   }
 
   let res;
@@ -101,8 +101,7 @@ export const login = async (
   const token = createToken(user);
 
   return { user, email, token };
-}
-
+};
 
 const createToken = (user: IUser): string => {
   if (!user._id) throw new GraphQLError("User id is not defined");
