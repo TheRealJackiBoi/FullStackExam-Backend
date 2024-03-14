@@ -1,4 +1,4 @@
-import mongoose, { CallbackError } from "mongoose";
+import mongoose, { CallbackError, Document } from "mongoose";
 import { ICompany, Bustle } from "../types/types";
 
 const companySchema = new mongoose.Schema<ICompany>({

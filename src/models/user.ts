@@ -1,42 +1,42 @@
-import mongoose from "mongoose";
-import { IUser, Role } from "../types/types";
+import mongoose from 'mongoose';
+import { IUser, Role } from '../types/types';
 
 const userSchema = new mongoose.Schema<IUser>(
   {
     firstName: {
       type: String,
       required: true,
-      message: "Firstname is required",
+      message: 'Firstname is required',
     },
     lastName: {
       type: String,
       required: true,
-      message: "Lastname is required",
+      message: 'Lastname is required',
     },
     role: {
       type: String,
       required: true,
       enum: Role,
       message:
-        "Role is required of following values: ADMIN, USER, COMPANYOWNER, COMPANYADMIN",
+        'Role is required of following values: ADMIN, USER, COMPANYOWNER, COMPANYADMIN',
     },
     cases: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Case",
+        ref: 'Case',
         required: true,
-        message: "ObjectId of a case is required",
+        message: 'ObjectId of a case is required',
       },
     ],
     address: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Address",
+      ref: 'Address',
       required: true,
-      message: "ObjectId of an address is required",
+      message: 'ObjectId of an address is required',
     },
     company: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Company",
+      ref: 'Company',
     },
   },
   {
@@ -50,28 +50,44 @@ userSchema.pre(/^find/, function (next) {
   }
   (this as any)
     .populate({
-      path: "cases",
-      select: "-__v",
+      path: 'cases',
+      select: '-__v',
     })
     .populate({
-      path: "address",
-      select: "-__v",
+      path: 'address',
+      select: '-__v',
     })
     .populate({
-      path: "company",
-      select: "-__v",
+      path: 'company',
+      select: '-__v',
       options: { _recursed: true },
     });
   next();
 });
 
-userSchema.pre("save", function () {
+userSchema.pre('save', function () {
   (this as any).populate({
-    path: "address",
-    select: "-__v",
-  });
+    path: 'address',
+    select: '-__v',
+  })
 });
 
-const User = mongoose.model<IUser>("User", userSchema);
+userSchema.post('updateOne', function (doc, next) {
+  doc.populate({
+    path: 'address',
+    select: '-__v',
+  })
+  doc.populate({
+    path: 'company',
+    select: '-__v',
+  })
+  doc.populate({
+    path: 'cases',
+    select: '-__v',
+  })
+  next();
+});
+
+const User = mongoose.model<IUser>('User', userSchema);
 
 export default User;
