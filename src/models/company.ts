@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { CallbackError } from "mongoose";
 import { ICompany, Bustle } from "../types/types";
 
 const companySchema = new mongoose.Schema<ICompany>({
@@ -78,28 +78,29 @@ companySchema.pre(/^find/, function (next) {
   next();
 });
 
-companySchema.pre("save", function (next) {
-  if ((this as any).options._recursed) {
-    return next();
-  }
-  (this as any).populate({
+companySchema.pre("save", async function (next) {
+  try {
+  this.populate({
     path: "address",
     select: "-__v",
   })
-  .populate({
+  this.populate({
     path: "owner",
     select: "-__v",
-    options: { _recursed: true },
   })
-  .populate({
+  this.populate({
     path: "services",
     select: "-__v",
   })
-  .populate({
+  this.populate({
     path: "admins",
     select: "-__v",
-    options: { _recursed: true },
   });
+
+    next();
+  } catch (error: CallbackError | any) {
+    next(error);
+  }
 });
 
 const Company = mongoose.model<ICompany>("Company", companySchema);
