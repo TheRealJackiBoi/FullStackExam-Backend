@@ -21,7 +21,37 @@ const serviceSchema = new mongoose.Schema<IService>({
   imageUrl:{
     type: String,
     required: true
+  },
+  company:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Company",
+    required: true,
+    message: "Company is required"
   }
+})
+
+serviceSchema.pre(/^find/, function(next){
+  if ((this as any).options._recursed) {
+    return next();
+  }
+  (this as any).populate({
+    path: "company",
+    select: "-__v",
+    options: { _recursed: true }
+  })
+  next()
+})
+
+serviceSchema.post("save", function(doc, next){
+  if ((this as any).options._recursed) {
+    return next();
+  }
+  (this as any).populate({
+    path: "company",
+    select: "-__v",
+    options: { _recursed: true }
+  })
+  next()
 })
 
 const Service = mongoose.model<IService>("Service", serviceSchema)

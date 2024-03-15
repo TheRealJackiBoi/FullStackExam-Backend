@@ -37,7 +37,7 @@ export interface IService {
   estimatedTime: number;
   estimatedPrice: number;
   imageUrl: string;
-  
+  company: ObjectId;
 }
 
 export interface IAuth {
@@ -94,7 +94,7 @@ export interface ICompany {
   _id?: ObjectId;
   name: string;
   address: IAddress;
-  services: IService[];
+  services: ObjectId[];
   description: string;
   admins?: ObjectId[];
   owner?: ObjectId;
