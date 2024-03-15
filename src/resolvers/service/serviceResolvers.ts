@@ -1,6 +1,7 @@
 import { GraphQLError } from "graphql";
 import { IContext } from "../../server";
 import { IBooking } from "../../types/types";
+import { companies } from "../company/companyResolver";
 
 export const service = async (
   parent: never,
@@ -41,22 +42,34 @@ export const createService = async (
     estimatedTime,
     estimatedPrice,
     imageUrl,
+    companyId,
   }: {
     name: string;
     estimatedTime: number;
     estimatedPrice: number;
     imageUrl: string;
+    companyId: string;
   },
   { dataSources }: IContext
 ) => {
-  const { Services } = dataSources;
+  const { Services, Companies } = dataSources;
+
+  const company = await Companies.findById(companyId);
+
+  if (!company) {
+    throw new GraphQLError("No company found with id: " + companyId);
+  }
 
   const res = await Services.create({
     name,
     estimatedTime,
     estimatedPrice,
     imageUrl,
+    company: companyId,
   });
+
+  company.services.push(res._id);
+  await company.save();
 
   return res;
 };
@@ -94,7 +107,14 @@ export const deleteService = async (
   { _id }: { _id: string },
   { dataSources }: IContext
 ) => {
-  const { Services } = dataSources;
+  const { Services, Companies } = dataSources;
+
+  Companies.find ({ services: _id }).then((res) => {
+    res.forEach((company) => {
+      company.services = company.services.filter((service) => service._id.toString() !== _id);
+      company.save();
+    });
+  });
 
   const res = await Services.findByIdAndDelete(_id);
 

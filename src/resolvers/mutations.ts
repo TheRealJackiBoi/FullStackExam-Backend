@@ -25,11 +25,11 @@ export const Mutation = {
   deleteBooking: auth([ Role.USER, Role.ADMIN, Role.COMPANYADMIN, Role.COMPANYOWNER ], deleteBooking ),
 
   // CRUD FOR SERVICE
-  createService: auth([ Role.COMPANYOWNER, Role.COMPANYADMIN ], createService ),
+  createService: auth([ Role.COMPANYOWNER, Role.COMPANYADMIN, Role.ADMIN ], createService ),
 
-  updateService: auth([ Role.COMPANYOWNER, Role.COMPANYADMIN ], updateService ),
+  updateService: auth([ Role.COMPANYOWNER, Role.COMPANYADMIN, Role.ADMIN ], updateService ),
 
-  deleteService: auth([ Role.COMPANYOWNER, Role.COMPANYADMIN ], deleteService ),
+  deleteService: auth([ Role.COMPANYOWNER, Role.COMPANYADMIN, Role.ADMIN ], deleteService ),
 
   // CRUD FOR USER
   createUser: createUser,
