@@ -48,9 +48,9 @@ export const Mutation = {
   // CRUD FOR COMPANY
   createCompany: auth([ Role.USER, Role.ADMIN ], createCompany ),
 
-  updateCompany: auth([ Role.COMPANYOWNER, Role.COMPANYADMIN], updateCompany ),
+  updateCompany: auth([ Role.COMPANYOWNER, Role.ADMIN, Role.COMPANYADMIN ], updateCompany ),
 
-  deleteCompany: auth([ Role.COMPANYOWNER ], deleteCompany ),
+  deleteCompany: auth([ Role.COMPANYOWNER, Role.ADMIN ], deleteCompany ),
 
   deleteCompanyAdmin: auth([ Role.ADMIN, Role.COMPANYOWNER ], deleteCompanyAdmin ),
 
