@@ -42,14 +42,10 @@ serviceSchema.pre(/^find/, function(next){
   next()
 })
 
-serviceSchema.post("save", function(doc, next){
-  if ((this as any).options._recursed) {
-    return next();
-  }
+serviceSchema.post("save", function(doc, next){ 
   (this as any).populate({
     path: "company",
     select: "-__v",
-    options: { _recursed: true }
   })
   next()
 })
