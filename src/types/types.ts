@@ -6,6 +6,7 @@ export interface IBooking {
   endTime: Date;
   status: Status;
   case: ICase;
+  company: ObjectId;
 }
 
 export interface IBookingInput {
@@ -16,6 +17,7 @@ export interface IBookingInput {
   device: String;
   cost: number;
   serviceId: ObjectId;
+  companyId?: ObjectId;
 }
 
 export interface ICase {
@@ -100,6 +102,7 @@ export interface ICompany {
   owner?: ObjectId;
   openForBooking: boolean;
   bustle?: Bustle;
+  bookings?: ObjectId[];
 }
 
 export enum Bustle {

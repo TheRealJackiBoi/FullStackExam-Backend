@@ -52,10 +52,16 @@ export const bookingsByUser = async (
 
 export const createBooking = async (
   parent: never,
-  { startTime, endTime, status, device, cost, serviceId }: IBookingInput,
+  { startTime, endTime, status, device, cost, serviceId, companyId }: IBookingInput,
   { dataSources }: IContext
 ) => {
-  const { Bookings } = dataSources;
+  const { Bookings, Companies } = dataSources;
+
+  const company = await Companies.findById(companyId);
+
+  if (!company) {
+    throw new Error("Company not found");
+  }
 
   const service = await dataSources.Services.findById(serviceId);
 
@@ -68,7 +74,11 @@ export const createBooking = async (
     endTime,
     status,
     case: { device, cost, service: service._id },
+    company: company._id,
   });
+
+  company.bookings!.push(res._id);
+  company.save();
 
   return res;
 };
@@ -102,10 +112,30 @@ export const updateBooking = async (
 
 export const deleteBooking = async (
   parent: never,
-  { _id }: IBookingInput,
+  { _id }: { _id: string },
   { dataSources }: IContext
 ) => {
-  const { Bookings } = dataSources;
+  const { Bookings, Companies } = dataSources;
+
+
+
+  const booking = await Bookings.findById(_id);
+
+  if (!booking) {
+    throw new GraphQLError("No booking found with id: " + _id);
+  }
+
+  const company = await Companies.findById(booking.company._id);
+
+  if (!company) {
+    throw new GraphQLError("No company found with id: " + booking.company._id);
+  }
+
+  company.bookings = company.bookings!.filter(
+    (booking) => booking.toString() !== _id
+  );
+
+  company.save();
 
   const res = await Bookings.findByIdAndDelete(_id);
 

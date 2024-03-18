@@ -29,6 +29,12 @@ const companySchema = new mongoose.Schema<ICompany>({
       message: "ObjectId of a service is required"
     }
   ],
+  bookings: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Booking",
+    }
+  ],
   description: {
     type: String,
     required: true,
@@ -74,6 +80,15 @@ companySchema.pre(/^find/, function (next) {
       path: "owner",
       select: "-__v",
       options: { _recursed: true },
+    })
+    .populate({
+      path: "bookings",
+      select: "-__v",
+      options: { _recursed: true },
+    })
+    .populate({
+      path: "bookings.case.service",
+      select: "-__v",
     });
   next();
 });
