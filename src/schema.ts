@@ -135,7 +135,7 @@ const typeDefs = `#graphql
     """
     Remove admin from company
     """
-    deleteCompanyAdmin(userId: ID!, companyId: ID!, token: String!): Company
+    deleteCompanyAdmin(userId: ID!, companyId: ID!, token: String!): User 
     
   }
 
