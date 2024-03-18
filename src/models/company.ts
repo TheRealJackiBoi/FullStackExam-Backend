@@ -85,10 +85,10 @@ companySchema.pre(/^find/, function (next) {
       path: "bookings",
       select: "-__v",
       options: { _recursed: true },
-    })
-    .populate({
-      path: "bookings.case.service",
-      select: "-__v",
+      populate: {
+        path: "case.service",
+        select: "-__v",
+      }
     });
   next();
 });

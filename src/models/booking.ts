@@ -53,7 +53,7 @@ bookingSchema.pre(/^find/, async function (next) {
   (this as any)
     .populate({
       path: "case.service",
-      select: "name estimatedTime",
+      select: "-__v",
     })
     .populate({
       path: "company",
