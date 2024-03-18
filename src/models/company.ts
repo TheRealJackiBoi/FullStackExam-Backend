@@ -5,46 +5,46 @@ const companySchema = new mongoose.Schema<ICompany>({
   name: {
     type: String,
     required: true,
-    message: "Name is required"
+    message: "Name is required",
   },
   address: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Address",
     required: true,
-    message: "ObjectId of an address is required"
+    message: "ObjectId of an address is required",
   },
   admins: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
-      message: "ObjectId of a user is required"
-    }
+      message: "ObjectId of a user is required",
+    },
   ],
   services: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Service",
       required: true,
-      message: "ObjectId of a service is required"
-    }
+      message: "ObjectId of a service is required",
+    },
   ],
   bookings: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Booking",
-    }
+    },
   ],
   description: {
     type: String,
     required: true,
-    message: "Description is required"
+    message: "Description is required",
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
-    message: "ObjectId of a user is required"
+    message: "ObjectId of a user is required",
   },
   openForBooking: {
     type: Boolean,
@@ -52,11 +52,10 @@ const companySchema = new mongoose.Schema<ICompany>({
   },
   bustle: {
     type: String,
-    enum: Bustle
+    enum: Bustle,
     //message: "ObjectId of a bustle is required of following values: LOW, MEDIUM, HIGH"
-  }
-})
-
+  },
+});
 
 companySchema.pre(/^find/, function (next) {
   if ((this as any).options._recursed) {
@@ -85,32 +84,38 @@ companySchema.pre(/^find/, function (next) {
       path: "bookings",
       select: "-__v",
       options: { _recursed: true },
-      populate: {
+      populate: [{
         path: "case.service",
         select: "-__v",
+      },
+      {
+        path: "user",
+        select: "-__v",
+        options:{_recursed: true}
       }
-    });
+    ],
+    }); 
   next();
 });
 
 companySchema.pre("save", async function (next) {
   try {
-  this.populate({
-    path: "address",
-    select: "-__v",
-  })
-  this.populate({
-    path: "owner",
-    select: "-__v",
-  })
-  this.populate({
-    path: "services",
-    select: "-__v",
-  })
-  this.populate({
-    path: "admins",
-    select: "-__v",
-  });
+    this.populate({
+      path: "address",
+      select: "-__v",
+    });
+    this.populate({
+      path: "owner",
+      select: "-__v",
+    });
+    this.populate({
+      path: "services",
+      select: "-__v",
+    });
+    this.populate({
+      path: "admins",
+      select: "-__v",
+    });
 
     next();
   } catch (error: CallbackError | any) {

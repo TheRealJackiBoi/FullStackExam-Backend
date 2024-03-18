@@ -64,7 +64,7 @@ const typeDefs = `#graphql
     """
     Creates a new booking
     """
-    createBooking(startTime: String!, endTime: String!, status: Status!, device: String!, cost: Float!, serviceId: ID!, companyId: ID!, token: String! ): Booking
+    createBooking(startTime: String!, endTime: String!, status: Status!, device: String!, cost: Float!, serviceId: ID!, companyId: ID!, userId: ID!, token: String! ): Booking
     """
     Updates a booking by id
     """
@@ -146,6 +146,7 @@ const typeDefs = `#graphql
     status: Status!
     case: Case!
     company: Company!
+    user: User!
   }
 
   type Case {
@@ -181,7 +182,7 @@ const typeDefs = `#graphql
     firstName: String!
     lastName: String!
     role: Role!
-    cases: [Case]!
+    bookings: [Booking]!
     address: Address!
     company: Company 
   }

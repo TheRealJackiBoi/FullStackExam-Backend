@@ -2,7 +2,11 @@ import { GraphQLError } from "graphql";
 import { IContext } from "../../server";
 import { IUserInput, IUser } from "../../types/types";
 
-export const users = async (parent: never, args: never, { dataSources }: IContext) => {
+export const users = async (
+  parent: never,
+  args: never,
+  { dataSources }: IContext
+) => {
   const { Users } = dataSources;
 
   const res = await Users.find();
@@ -12,9 +16,13 @@ export const users = async (parent: never, args: never, { dataSources }: IContex
   }
 
   return res;
-}
+};
 
-export const user = async (parent: never, { _id }: IUser, { dataSources }: IContext) => {
+export const user = async (
+  parent: never,
+  { _id }: IUser,
+  { dataSources }: IContext
+) => {
   const { Users } = dataSources;
 
   const res = await Users.findById(_id);
@@ -24,7 +32,7 @@ export const user = async (parent: never, { _id }: IUser, { dataSources }: ICont
   }
 
   return res;
-}
+};
 
 export const updateUser = async (
   parent: never,
@@ -83,8 +91,25 @@ export const deleteUser = async (
   { _id }: IUserInput,
   { dataSources }: IContext
 ) => {
-  const { Users } = dataSources;
+  const { Users, Bookings, Companies } = dataSources;
 
+  const user = await Users.findById(_id);
+
+  if (!user) {
+    throw new GraphQLError("No user found with id: " + _id);
+  }
+
+  const bookings = await Bookings.find({ user: _id });
+
+  if (bookings) {
+    bookings.forEach(async (booking) => {
+      const company = await Companies.findById(booking.company);
+      company?.bookings?.filter((bookingId) => bookingId !== booking._id);
+      await company?.save();
+
+      await Bookings.findByIdAndDelete(booking._id);
+    });
+  }
   const res = await Users.findByIdAndDelete(_id);
 
   return res;
