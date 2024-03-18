@@ -91,9 +91,9 @@ export const deleteCompanyAdmin = async (parent: never, { userId, companyId }: {
 
     await company.save();
 
-    Users.findByIdAndDelete(userId)
+    await Users.findByIdAndDelete(userId)
 
-    return company;
+    return user;
 }
 
 export const createCompanyAdmin = async (parent: never, { firstName, lastName, email, password, role, zipCode, street, houseNumber, companyId }: { firstName: string, lastName: string, email: string, password: string, role: string, zipCode: number, street: string, houseNumber: number, companyId: string }, { dataSources }: IContext) => {
