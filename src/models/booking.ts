@@ -90,7 +90,11 @@ bookingSchema.pre("save", async function (next) {
     await this.populate({
       path: "company.owner",
       select: "-__v",
-    });
+    })
+    await this.populate({
+      path: "user",
+      select: "-__v",
+    })
     next();
   } catch (error: Error | any) {
     next(error);
