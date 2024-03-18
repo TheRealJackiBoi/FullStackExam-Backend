@@ -45,7 +45,7 @@ export const createCompany = async (parent: never, { name, description, zipCode,
         throw new Error('User is already a company owner');
     }
 
-    const res = await Companies.create({ name, description, address, owner });
+    const res = await Companies.create({ name, description, address, owner, admins: [], services: [], bookings: []});
 
     owner.company = res._id;
     owner.role = Role.COMPANYOWNER;

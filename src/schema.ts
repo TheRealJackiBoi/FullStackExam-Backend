@@ -64,7 +64,7 @@ const typeDefs = `#graphql
     """
     Creates a new booking
     """
-    createBooking(startTime: String!, endTime: String!, status: Status!, device: String!, cost: Float!, serviceId: ID!, token: String! ): Booking
+    createBooking(startTime: String!, endTime: String!, status: Status!, device: String!, cost: Float!, serviceId: ID!, companyId: ID!, token: String! ): Booking
     """
     Updates a booking by id
     """
@@ -145,6 +145,7 @@ const typeDefs = `#graphql
     endTime: String!
     status: Status!
     case: Case!
+    company: Company!
   }
 
   type Case {
@@ -209,6 +210,7 @@ const typeDefs = `#graphql
     bustle: Bustle
     admins: [User]!
     owner: User
+    bookings: [Booking]!
   }
 
   enum Bustle {
