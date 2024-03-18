@@ -1,6 +1,6 @@
 import { GraphQLError } from 'graphql';
 import { IContext } from '../../server';
-import { IAddress, ICompanyInput, Role } from '../../types/types';
+import { IAddress, IBooking, ICompanyInput, Role } from '../../types/types';
 
 export const companies = async (parent: never, args: never, { dataSources }: IContext) => {
     const { Companies } = dataSources;
@@ -70,7 +70,33 @@ export const updateCompany = async (parent: never, {_id, name, description, zipC
 }
 
 export const deleteCompany = async (parent: never, { _id }: { _id: string }, { dataSources }: IContext) => {
-    const { Companies } = dataSources;
+    const { Companies, Bookings, Users } = dataSources;
+
+    const company = await Companies.findById(_id);
+
+    if (!company) {
+        throw new Error('Company not found');
+    }
+
+    company.bookings!.forEach(async (bookingId) => {
+        
+        const booking = await Bookings.findById(bookingId);
+
+        if (!booking) {
+            throw new GraphQLError('Booking not found');
+        }
+
+        const user = await Users.findById(booking?.user._id);
+
+        if (!user) {
+            throw new GraphQLError('User not found');
+        }
+
+        user.bookings = user.bookings!.filter((userBooking) => userBooking.toString() !== booking._id.toString());
+        await user.save();
+
+        await Bookings.findByIdAndDelete(booking);
+    })
 
     const res = await Companies.findByIdAndDelete(_id);
 

@@ -16,7 +16,7 @@ const caseSchema = new mongoose.Schema<ICase>({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Service",
     required: true,
-    message: "ObjectId of a service is required",
+    message: "Service is required",
   },
 });
 
@@ -44,6 +44,12 @@ const bookingSchema = new mongoose.Schema<IBooking>({
     ref: "Company",
     required: true,
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+    message: "User is required",
+  },
 });
 
 bookingSchema.pre(/^find/, async function (next) {
@@ -58,7 +64,12 @@ bookingSchema.pre(/^find/, async function (next) {
     .populate({
       path: "company",
       select: "-__v",
-    });
+    })
+    .populate({
+      path: "user",
+      select: "-__v",
+      options: {_recursed: true}
+    })
   next();
 });
 
@@ -79,7 +90,11 @@ bookingSchema.pre("save", async function (next) {
     await this.populate({
       path: "company.owner",
       select: "-__v",
-    });
+    })
+    await this.populate({
+      path: "user",
+      select: "-__v",
+    })
     next();
   } catch (error: Error | any) {
     next(error);
@@ -105,8 +120,7 @@ bookingSchema.post(/^delete/, async function (doc, next) {
       select: "-__v",
     });
     next();
-  }
-  catch (error: Error | any) {
+  } catch (error: Error | any) {
     next(error);
   }
 });

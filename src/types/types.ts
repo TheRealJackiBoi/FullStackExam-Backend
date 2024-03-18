@@ -7,6 +7,7 @@ export interface IBooking {
   status: Status;
   case: ICase;
   company: ObjectId;
+  user: ObjectId;
 }
 
 export interface IBookingInput {
@@ -18,6 +19,7 @@ export interface IBookingInput {
   cost: number;
   serviceId: ObjectId;
   companyId?: ObjectId;
+  userId?: ObjectId;
 }
 
 export interface ICase {
@@ -61,7 +63,7 @@ export interface IUser {
   firstName: string;
   lastName: string;
   role: Role;
-  cases: ICase[];
+  bookings: IBooking[];
   address: IAddress;
   company?: ICompany | ObjectId;
 }
