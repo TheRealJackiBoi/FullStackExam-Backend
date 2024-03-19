@@ -295,8 +295,6 @@ export const searchCompanies = async (
 
     return result;
   } catch (error) {
-    console.log(error);
-
     throw new GraphQLError("Failed to search companies");
   }
 };

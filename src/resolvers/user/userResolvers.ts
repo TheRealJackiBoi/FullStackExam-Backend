@@ -91,7 +91,7 @@ export const deleteUser = async (
   { _id }: IUserInput,
   { dataSources }: IContext
 ) => {
-  const { Users, Bookings, Companies } = dataSources;
+  const { Users, Bookings, Companies, Auth } = dataSources;
 
   const user = await Users.findById(_id);
 
@@ -110,6 +110,9 @@ export const deleteUser = async (
       await Bookings.findByIdAndDelete(booking._id);
     });
   }
+
+  await Auth.findOneAndDelete({ user: _id }); // Corrected method
+
   const res = await Users.findByIdAndDelete(_id);
 
   return res;
