@@ -58,6 +58,11 @@ const typeDefs = `#graphql
     Returns a company by id
     """
     company(_id: ID!): Company
+    """
+    Returns a list of companies
+    """
+    searchCompanies(query: String!): [Company]
+
   }
 
   type Mutation {
@@ -123,11 +128,11 @@ const typeDefs = `#graphql
     """
     Creates a new company
     """
-    createCompany(name: String!, description: String!, zipCode: Int!, street: String!, houseNumber: Int!, companyOwnerId: ID!, token: String!): Company
+    createCompany(name: String!, description: String!, zipCode: Int!, street: String!, houseNumber: Int!, companyOwnerId: ID!, token: String!, categories: [Category]): Company
     """
     Updates a company by id
     """
-    updateCompany(_id: ID!, name: String, description: String, zipCode: Int, streetName: String, houseNumber: Int, token: String!): Company
+    updateCompany(_id: ID!, name: String, description: String, zipCode: Int, streetName: String, houseNumber: Int, token: String!, categories: [Category]): Company
     """
     Deletes a company by id
     """
@@ -136,6 +141,7 @@ const typeDefs = `#graphql
     Remove admin from company
     """
     deleteCompanyAdmin(userId: ID!, companyId: ID!, token: String!): User 
+
     
   }
 
@@ -194,6 +200,16 @@ const typeDefs = `#graphql
     COMPANYADMIN
   }
 
+  enum Category {
+    PC,
+    MOBILE,
+    TABLET,
+    CONSOLE,
+    PRINTER,
+    TV,
+    SMARTHOME
+  }
+
   type Address {
     _id: ID!
     zipCode: Int!
@@ -212,6 +228,7 @@ const typeDefs = `#graphql
     admins: [User]!
     owner: User
     bookings: [Booking]!
+    categories: [Category]!
   }
 
   enum Bustle {

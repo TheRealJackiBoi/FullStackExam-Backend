@@ -94,6 +94,16 @@ export interface IAddress {
   houseNumber: number;
 }
 
+export enum Category {
+  PC = "PC",
+  MOBILE = "MOBILE",
+  TABLET = "TABLET",
+  CONSOLE = "CONSOLE",
+  PRINTER = "PRINTER",
+  TV = "TV",
+  SMARTHOME = "SMARTHOME",
+}
+
 export interface ICompany {
   _id?: ObjectId;
   name: string;
@@ -105,20 +115,22 @@ export interface ICompany {
   openForBooking: boolean;
   bustle?: Bustle;
   bookings?: ObjectId[];
+  categories?: Category[];
 }
 
 export enum Bustle {
   LOW = "LOW",
   MEDIUM = "MEDIUM",
-  HIGH = "HIGH"
+  HIGH = "HIGH",
 }
 
-export interface ICompanyInput { 
-  _id?: ObjectId,
-  name: string, 
-  description: String, 
-  zipCode: number, 
-  streetName: String, 
-  houseNumber: number,
-  companyOwnerId: ObjectId
+export interface ICompanyInput {
+  _id?: ObjectId;
+  name: string;
+  description: String;
+  zipCode: number;
+  streetName: String;
+  houseNumber: number;
+  companyOwnerId: ObjectId;
+  categories: Category[];
 }
