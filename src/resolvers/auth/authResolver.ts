@@ -60,8 +60,6 @@ export const createUser = async (
 
   password = hash;
 
-  console.log(res._id);
-
   const auth = await Auth.create({
     email,
     password,
