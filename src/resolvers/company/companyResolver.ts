@@ -1,6 +1,7 @@
 import { GraphQLError } from 'graphql';
 import { IContext } from '../../server';
 import { IAddress, IBooking, ICompanyInput, Role } from '../../types/types';
+import bcrypt from "bcrypt";
 
 export const companies = async (parent: never, args: never, { dataSources }: IContext) => {
     const { Companies } = dataSources;
@@ -104,7 +105,7 @@ export const deleteCompany = async (parent: never, { _id }: { _id: string }, { d
 }
 
 export const deleteCompanyAdmin = async (parent: never, { userId, companyId }: { userId: string, companyId: string }, { dataSources }: IContext) => {
-    const { Companies, Users } = dataSources;
+    const { Companies, Users, Auth } = dataSources;
 
     const company = await Companies.findById(companyId);
     const user = await Users.findById(userId);
@@ -117,13 +118,15 @@ export const deleteCompanyAdmin = async (parent: never, { userId, companyId }: {
 
     await company.save();
 
+    await Auth.findOneAndDelete({ user: userId });
+
     await Users.findByIdAndDelete(userId)
 
     return user;
 }
 
 export const createCompanyAdmin = async (parent: never, { firstName, lastName, email, password, role, zipCode, street, houseNumber, companyId }: { firstName: string, lastName: string, email: string, password: string, role: string, zipCode: number, street: string, houseNumber: number, companyId: string }, { dataSources }: IContext) => {
-    const { Users, Companies, Addresses } = dataSources;
+    const { Users, Companies, Addresses, Auth } = dataSources;
 
     let address = await Addresses.findOne({ zipCode, street, houseNumber });
 
@@ -145,12 +148,19 @@ export const createCompanyAdmin = async (parent: never, { firstName, lastName, e
     }
 
     if (!user) {
-      user = await Users.create({ firstName, lastName, email, password, role, address, company });
+      user = await Users.create({ firstName, lastName, role, address, company });
     }
 
     company.admins!.push(user._id);
 
     await company.save();
+
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(password, salt);
+
+    password = hash;
+
+    const auth = await Auth.create({ email, password, user: user._id})
 
     return user;
 }
