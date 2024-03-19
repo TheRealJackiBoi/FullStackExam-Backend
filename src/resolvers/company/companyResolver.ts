@@ -32,7 +32,7 @@ export const createCompany = async (parent: never, { name, description, zipCode,
     let address = await Addresses.findOne({ zipCode: zipCode, streetName: streetName, houseNumber: houseNumber});
 
     if (!address) {
-        address = await Addresses.create({ zipCode: zipCode, streetName: streetName, houseNumber: houseNumber });
+        address = await Addresses.create({ zipCode: zipCode, street: streetName, houseNumber: houseNumber });
     }
 
     const owner = await Users.findById(companyOwnerId);

@@ -123,7 +123,7 @@ const typeDefs = `#graphql
     """
     Creates a new company
     """
-    createCompany(name: String!, description: String!, zipCode: Int!, street: String!, houseNumber: Int!, companyOwnerId: ID!, token: String!): Company
+    createCompany(name: String!, description: String!, zipCode: Int!, streetName: String!, houseNumber: Int!, companyOwnerId: ID!, token: String!): Company
     """
     Updates a company by id
     """
