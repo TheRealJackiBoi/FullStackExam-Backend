@@ -1,6 +1,12 @@
 import { GraphQLError } from "graphql";
 import { IContext } from "../../server";
-import { IAddress, ICompanyInput, Role, ICompany } from "../../types/types";
+import {
+  IAddress,
+  ICompanyInput,
+  Role,
+  ICompany,
+  IService,
+} from "../../types/types";
 
 export const companies = async (
   parent: never,
@@ -264,18 +270,33 @@ export const searchCompanies = async (
     const { Companies, Services } = dataSources;
     const regexQuery = new RegExp(query, "i");
 
-    // Populate the 'services' field before executing the search
-    const companies = (await Companies.find({
+    const services = (await Services.find({
+      name: { $regex: regexQuery },
+    })) as IService[];
+
+    const companyIds = services.map((service) => service.company._id);
+
+    const companies = await Companies.find({
       $or: [
-        { "services.name": { $regex: regexQuery } }, // Search in services' names
         { name: { $regex: regexQuery } }, // Search company names
         { categories: regexQuery }, // Search in categories array
         { description: { $regex: regexQuery } }, // Search descriptions
       ],
-    }).populate("services")) as ICompany[];
+      _id: { $nin: companyIds }, // Exclude companies that have services matching the query
+    }).select("_id");
 
-    return companies;
+    const combinedIds = companyIds.concat(
+      companies.map((company) => company._id)
+    );
+    // remove duplicates
+    const uniqueIds = Array.from(new Set(combinedIds));
+
+    const result = await Companies.find({ _id: { $in: uniqueIds } });
+
+    return result;
   } catch (error) {
+    console.log(error);
+
     throw new GraphQLError("Failed to search companies");
   }
 };
