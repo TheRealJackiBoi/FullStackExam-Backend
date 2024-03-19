@@ -48,14 +48,14 @@ export const createCompany = async (
 
   let address = await Addresses.findOne({
     zipCode: zipCode,
-    streetName: streetName,
+    street: streetName,
     houseNumber: houseNumber,
   });
 
   if (!address) {
     address = await Addresses.create({
       zipCode: zipCode,
-      streetName: streetName,
+      street: streetName,
       houseNumber: houseNumber,
     });
   }
