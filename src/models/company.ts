@@ -1,5 +1,5 @@
 import mongoose, { CallbackError, Document } from "mongoose";
-import { ICompany, Bustle } from "../types/types";
+import { ICompany, Bustle, Category } from "../types/types";
 
 const companySchema = new mongoose.Schema<ICompany>({
   name: {
@@ -50,6 +50,11 @@ const companySchema = new mongoose.Schema<ICompany>({
     type: Boolean,
     default: false,
   },
+  categories: {
+    type: [String],
+    enum: [Category],
+    //message: "Category is required of following values: PC, MOBILE, TABLET, CONSOLE, PRINTER, TV, SMARTHOME"
+  },
   bustle: {
     type: String,
     enum: Bustle,
@@ -84,17 +89,18 @@ companySchema.pre(/^find/, function (next) {
       path: "bookings",
       select: "-__v",
       options: { _recursed: true },
-      populate: [{
-        path: "case.service",
-        select: "-__v",
-      },
-      {
-        path: "user",
-        select: "-__v",
-        options:{_recursed: true}
-      }
-    ],
-    }); 
+      populate: [
+        {
+          path: "case.service",
+          select: "-__v",
+        },
+        {
+          path: "user",
+          select: "-__v",
+          options: { _recursed: true },
+        },
+      ],
+    });
   next();
 });
 

@@ -64,7 +64,7 @@ userSchema.pre(/^find/, function (next) {
       populate: {
         path: "company",
         select: "-__v",
-        options: {_recursed: true}
+        options: { _recursed: true },
       },
     });
   next();
