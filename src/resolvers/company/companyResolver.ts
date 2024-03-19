@@ -1,25 +1,16 @@
-import { GraphQLError } from "graphql";
-import { IContext } from "../../server";
-import {
-  IAddress,
-  ICompanyInput,
-  Role,
-  ICompany,
-  IService,
-} from "../../types/types";
+import { GraphQLError } from 'graphql';
+import { IContext } from '../../server';
+import { IAddress, IBooking, ICompanyInput, IService, Role } from '../../types/types';
+import bcrypt from "bcrypt";
 
-export const companies = async (
-  parent: never,
-  args: never,
-  { dataSources }: IContext
-) => {
-  const { Companies } = dataSources;
+export const companies = async (parent: never, args: never, { dataSources }: IContext) => {
+    const { Companies } = dataSources;
 
-  const res = await Companies.find();
+    const res = await Companies.find();
 
-  if (!res) {
-    throw new GraphQLError("No companies found");
-  }
+    if (!res) {
+      throw new GraphQLError("No companies found");
+    }
 
   return res;
 };
@@ -74,7 +65,6 @@ export const createCompany = async (
   if (!owner) {
     throw new Error("Owner not found");
   }
-
   if (owner.company) {
     throw new Error("User is already a company owner");
   }
@@ -176,7 +166,7 @@ export const deleteCompanyAdmin = async (
   { userId, companyId }: { userId: string; companyId: string },
   { dataSources }: IContext
 ) => {
-  const { Companies, Users } = dataSources;
+  const { Companies, Users, Auth } = dataSources;
 
   const company = await Companies.findById(companyId);
   const user = await Users.findById(userId);
@@ -192,6 +182,8 @@ export const deleteCompanyAdmin = async (
   await company.save();
 
   await Users.findByIdAndDelete(userId);
+
+  await Auth.findOneAndDelete({ user: userId });
 
   return user;
 };
@@ -221,7 +213,7 @@ export const createCompanyAdmin = async (
   },
   { dataSources }: IContext
 ) => {
-  const { Users, Companies, Addresses } = dataSources;
+  const { Users, Companies, Addresses, Auth } = dataSources;
 
   let address = await Addresses.findOne({ zipCode, street, houseNumber });
 
@@ -246,18 +238,25 @@ export const createCompanyAdmin = async (
     user = await Users.create({
       firstName,
       lastName,
-      email,
-      password,
       role,
       address,
       company,
     });
+    
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(password, salt);
+
+  password = hash;
+
+  const auth = await Auth.create({ email, password, user: user._id})
+  
   }
+
 
   company.admins!.push(user._id);
 
   await company.save();
-
+  
   return user;
 };
 
