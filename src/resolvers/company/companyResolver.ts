@@ -1,16 +1,26 @@
-import { GraphQLError } from 'graphql';
-import { IContext } from '../../server';
-import { IAddress, IBooking, ICompanyInput, IService, Role } from '../../types/types';
-import bcrypt from "bcrypt";
+import { GraphQLError } from "graphql";
+import { IContext } from "../../server";
+import {
+  IAddress,
+  IBooking,
+  ICompanyInput,
+  IService,
+  Role,
+} from "../../types/types";
+import { passwordHashAndSalt } from "../../util/passwordHandler";
 
-export const companies = async (parent: never, args: never, { dataSources }: IContext) => {
-    const { Companies } = dataSources;
+export const companies = async (
+  parent: never,
+  args: never,
+  { dataSources }: IContext
+) => {
+  const { Companies } = dataSources;
 
-    const res = await Companies.find();
+  const res = await Companies.find();
 
-    if (!res) {
-      throw new GraphQLError("No companies found");
-    }
+  if (!res) {
+    throw new GraphQLError("No companies found");
+  }
 
   return res;
 };
@@ -242,21 +252,16 @@ export const createCompanyAdmin = async (
       address,
       company,
     });
-    
-  const salt = await bcrypt.genSalt(10);
-  const hash = await bcrypt.hash(password, salt);
 
-  password = hash;
+    password = await passwordHashAndSalt(password);
 
-  const auth = await Auth.create({ email, password, user: user._id})
-  
+    const auth = await Auth.create({ email, password, user: user._id });
   }
-
 
   company.admins!.push(user._id);
 
   await company.save();
-  
+
   return user;
 };
 

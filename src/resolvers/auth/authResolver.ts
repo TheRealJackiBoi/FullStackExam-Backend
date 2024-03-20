@@ -2,7 +2,10 @@ import { GraphQLError } from "graphql";
 import { IContext } from "../../server";
 import { IAuth, IAuthInput, IUser } from "../../types/types";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
+import {
+  passwordHashAndSalt,
+  comparePassword,
+} from "../../util/passwordHandler";
 import { ObjectId } from "mongodb";
 
 export const createUser = async (
@@ -55,10 +58,7 @@ export const createUser = async (
     });
   }
 
-  const salt = await bcrypt.genSalt(10);
-  const hash = await bcrypt.hash(password, salt);
-
-  password = hash;
+  password = await passwordHashAndSalt(password);
 
   const auth = await Auth.create({
     email,
@@ -82,7 +82,7 @@ export const login = async (
     throw new GraphQLError("Email or password is incorrect");
   }
 
-  const validPassword = await bcrypt.compare(password, auth.password);
+  const validPassword = await comparePassword(password, auth.password);
 
   if (!validPassword) {
     throw new GraphQLError("Email or password is incorrect");
