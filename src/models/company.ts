@@ -60,6 +60,8 @@ const companySchema = new mongoose.Schema<ICompany>({
     enum: Bustle,
     //message: "ObjectId of a bustle is required of following values: LOW, MEDIUM, HIGH"
   },
+}, {
+  timestamps: true,
 });
 
 companySchema.pre(/^find/, function (next) {
