@@ -28,6 +28,8 @@ const serviceSchema = new mongoose.Schema<IService>({
     required: true,
     message: "Company is required"
   }
+}, {
+  timestamps: true
 })
 
 serviceSchema.pre(/^find/, function(next){
